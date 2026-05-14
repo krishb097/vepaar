@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<link rel="manifest" href="manifest.json">
+
+<title>GENERAL REPORT</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
+      rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html, body{
+    width:100%;
+    min-height:100%;
+    background:#0033cc;
+    font-family:'Share Tech Mono', monospace;
+    color:#fff;
+    overflow-x:hidden;
+}
+
+/* =========================
+APP (MOBILE FIRST)
+========================= */
+
+.app{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    padding:10px;
+    gap:10px;
+    border:2px solid #fff;
+}
+
+/* =========================
+HEADER
+========================= */
+
+.header{
+    border:2px solid #fff;
+    padding:12px;
+    text-align:center;
+}
+
+.header-top{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    align-items:center;
+}
+
+.title{
+    font-size:24px;
+    letter-spacing:2px;
+}
+
+.mode{
+    font-size:16px;
+    color:#99ffcc;
+}
+
+.datetime{
+    margin-top:10px;
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    font-size:14px;
+}
+
+/* =========================
+MAIN LAYOUT (MOBILE FIRST)
+========================= */
+
+.main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+/* =========================
+PANELS
+========================= */
+
+.left-panel,
+.right-panel{
+    width:100%;
+    border:2px solid #fff;
+    padding:10px;
+}
+
+/* =========================
+SEARCH
+========================= */
+
+.search-input{
+    width:100%;
+    height:45px;
+    border:none;
+    outline:none;
+    background:#9fc3ff;
+    color:#0033cc;
+    padding:10px;
+    font-size:16px;
+}
+
+/* =========================
+TABLE
+========================= */
+
+.table-box{
+    width:100%;
+    overflow-x:auto;
+    border:2px solid #fff;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:600px;
+}
+
+thead{
+    background:#89a8ff;
+    color:#0033cc;
+    position:sticky;
+    top:0;
+}
+
+th, td{
+    padding:10px;
+    font-size:14px;
+    text-align:left;
+    border-bottom:1px solid rgba(255,255,255,0.2);
+}
+
+/* =========================
+HOVER (desktop only feel)
+========================= */
+
+tbody tr:hover{
+    background:#9fc3ff;
+    color:#0033cc;
+}
+
+/* =========================
+INFO BOX
+========================= */
+
+.info-box{
+    border:2px solid #fff;
+    padding:12px;
+    margin-bottom:10px;
+}
+
+.info-title{
+    font-size:18px;
+    margin-bottom:10px;
+    color:#ff66cc;
+}
+
+.info-line{
+    font-size:14px;
+    margin-bottom:6px;
+}
+
+/* =========================
+COLORS
+========================= */
+
+.plus{
+    color:#00ff66;
+    font-weight:bold;
+}
+
+.minus{
+    color:#ff6666;
+    font-weight:bold;
+}
+
+/* =========================
+HELP BAR
+========================= */
+
+.help-bar{
+    border:2px solid #fff;
+    background:#0027a0;
+    padding:10px;
+    text-align:center;
+    font-size:12px;
+    color:#99ffcc;
+}
+
+/* =========================
+TABLE RESPONSIVE WRAP
+========================= */
+
+.table-box{
+    overflow-x:auto;
+}
+
+/* =========================
+TABLET
+========================= */
+
+@media (min-width:768px){
+
+    .header-top{
+        flex-direction:row;
+        justify-content:space-between;
+    }
+
+    .title{
+        font-size:32px;
+    }
+
+    .datetime{
+        flex-direction:row;
+        justify-content:space-between;
+        font-size:16px;
+    }
+
+    .main{
+        flex-direction:row;
+    }
+
+    .left-panel{
+        width:75%;
+    }
+
+    .right-panel{
+        width:25%;
+    }
+
+    th, td{
+        font-size:16px;
+        padding:12px;
+    }
+
+    .info-line{
+        font-size:16px;
+    }
+
+    .help-bar{
+        font-size:14px;
+    }
+}
+
+/* =========================
+DESKTOP LARGE
+========================= */
+
+@media (min-width:1200px){
+
+    .title{
+        font-size:38px;
+    }
+
+    .search-input{
+        font-size:18px;
+        height:55px;
+    }
+
+    th, td{
+        font-size:18px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="header-top">
+
+            <div class="title">
+                GENERAL REPORT
+            </div>
+
+            <div class="mode">
+                HAVALA DETAILS
+            </div>
+
+        </div>
+
+        <div class="datetime">
+
+            <div id="dateBox">
+                DATE :-
+            </div>
+
+            <div id="timeBox">
+                TIME :-
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+        <!-- LEFT -->
+
+        <div class="left-panel">
+
+            <!-- SEARCH -->
+
+            <div class="search-box">
+
+                <input type="text"
+                       id="searchInput"
+                       class="search-input"
+                       placeholder="SEARCH PARTY CODE / NAME">
+
+            </div>
+
+            <!-- TABLE -->
+
+            <div class="table-box">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>SR.</th>
+
+                            <th>PCODE</th>
+
+                            <th>PARTY NAME</th>
+
+                            <th>AMOUNT</th>
+
+                            <th>REMARK</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="reportTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="right-panel">
+
+            <div class="info-box">
+
+                <div class="info-title">
+                    SUMMARY
+                </div>
+
+                <div class="info-line"
+                     id="totalEntries">
+
+                    TOTAL ENTRIES : 0
+
+                </div>
+
+                <div class="info-line plus"
+                     id="totalCredit">
+
+                    TOTAL CREDIT : 0
+
+                </div>
+
+                <div class="info-line minus"
+                     id="totalDebit">
+
+                    TOTAL DEBIT : 0
+
+                </div>
+
+            </div>
+
+            <div class="info-box">
+
+                <div class="info-title">
+                    SHORTCUTS
+                </div>
+
+                <div class="info-line">
+                    ESC = DASHBOARD
+                </div>
+
+                <div class="info-line">
+                    CTRL + F = SEARCH
+                </div>
+
+                <div class="info-line">
+                    LIVE REPORT VIEW
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- HELP -->
+
+    <div class="help-bar">
+
+        LIVE MONEY TRANSFER REPORT |
+        + CREDIT |
+        - DEBIT |
+        ESC = BACK
+
+    </div>
+
+</div>
+
+<script>
+
+/* =========================================
+SECURITY
+========================================= */
+
+if(
+    localStorage.getItem('admin_login')
+    !== 'true'
+){
+
+    window.location.href =
+        'index.html';
+
+}
+
+/* =========================================
+DATE TIME
+========================================= */
+
+function updateDateTime(){
+
+    const now = new Date();
+
+    document.getElementById('dateBox')
+    .innerHTML =
+        'DATE :- ' +
+        now.toLocaleDateString();
+
+    document.getElementById('timeBox')
+    .innerHTML =
+        'TIME :- ' +
+        now.toLocaleTimeString();
+
+}
+
+setInterval(updateDateTime,1000);
+
+updateDateTime();
+
+/* =========================================
+LOAD DATA
+========================================= */
+
+const table =
+    document.getElementById('reportTable');
+
+const searchInput =
+    document.getElementById('searchInput');
+
+/* =========================================
+CREATE REPORT DATA
+========================================= */
+
+function createReportRows(){
+
+    const transactions =
+        JSON.parse(
+            localStorage.getItem('transactions')
+        ) || [];
+
+    let rows = [];
+
+    transactions.forEach(item=>{
+
+        /* SENDER */
+
+        rows.push({
+
+            pcode:item.fromCode,
+
+            partyName:
+                item.fromName,
+
+            amount:
+                '- ' +
+                Number(item.amount)
+                .toLocaleString(),
+
+            rawAmount:
+                -Number(item.amount),
+
+            remark:
+                item.remark || '-'
+
+        });
+
+        /* RECEIVER */
+
+        rows.push({
+
+            pcode:item.toCode,
+
+            partyName:
+                item.toName,
+
+            amount:
+                '+ ' +
+                Number(item.amount)
+                .toLocaleString(),
+
+            rawAmount:
+                Number(item.amount),
+
+            remark:
+                item.remark || '-'
+
+        });
+
+    });
+
+    return rows;
+
+}
+
+/* =========================================
+RENDER
+========================================= */
+
+function renderTable(){
+
+    table.innerHTML = '';
+
+    const keyword =
+        searchInput.value
+        .trim()
+        .toLowerCase();
+
+    let rows =
+        createReportRows();
+
+    if(keyword){
+
+        rows = rows.filter(row=>
+
+            row.pcode
+            .toLowerCase()
+            .includes(keyword)
+
+            ||
+
+            row.partyName
+            .toLowerCase()
+            .includes(keyword)
+
+        );
+
+    }
+
+    let totalCredit = 0;
+    let totalDebit = 0;
+
+    if(rows.length === 0){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td colspan="5"
+                    style="
+                        text-align:center;
+                        padding:40px;
+                    ">
+
+                    NO RECORD FOUND
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+    rows.forEach((row,index)=>{
+
+        if(row.rawAmount > 0){
+
+            totalCredit += row.rawAmount;
+
+        }else{
+
+            totalDebit += Math.abs(
+                row.rawAmount
+            );
+
+        }
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${index + 1}</td>
+
+                <td>${row.pcode}</td>
+
+                <td>${row.partyName}</td>
+
+                <td class="${
+                    row.rawAmount > 0
+                    ? 'plus'
+                    : 'minus'
+                }">
+
+                    ${row.amount}
+
+                </td>
+
+                <td>${row.remark}</td>
+
+            </tr>
+
+        `;
+
+    });
+
+    document.getElementById('totalEntries')
+    .innerHTML =
+        'TOTAL ENTRIES : ' +
+        rows.length;
+
+    document.getElementById('totalCredit')
+    .innerHTML =
+        'TOTAL CREDIT : ' +
+        totalCredit.toLocaleString();
+
+    document.getElementById('totalDebit')
+    .innerHTML =
+        'TOTAL DEBIT : ' +
+        totalDebit.toLocaleString();
+
+}
+
+/* =========================================
+SEARCH
+========================================= */
+
+searchInput.addEventListener(
+    'input',
+    renderTable
+);
+
+/* =========================================
+AUTO LIVE REFRESH
+========================================= */
+
+setInterval(()=>{
+
+    renderTable();
+
+},1000);
+
+/* =========================================
+KEYBOARD
+========================================= */
+
+document.addEventListener(
+    'keydown',
+    function(e){
+
+    /* ESC */
+
+    if(e.key === 'Escape'){
+
+        window.location.href =
+            'dashboard.html';
+
+    }
+
+    /* CTRL + F */
+
+    if(
+        e.ctrlKey
+        &&
+        e.key.toLowerCase() === 'f'
+    ){
+
+        e.preventDefault();
+
+        searchInput.focus();
+
+    }
+
+});
+
+/* =========================================
+INIT
+========================================= */
+
+renderTable();
+
+/* =========================================
+DISABLE RIGHT CLICK
+========================================= */
+
+document.addEventListener(
+    'contextmenu',
+    e=>e.preventDefault()
+);
+
+/* =========================================
+DISABLE SELECT
+========================================= */
+
+document.addEventListener(
+    'selectstart',
+    e=>e.preventDefault()
+);
+
+</script>
+
+</body>
+</html>

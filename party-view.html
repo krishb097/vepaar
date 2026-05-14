@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<link rel="manifest" href="manifest.json">
+
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
+      rel="stylesheet">
+
+<title>Party View</title>
+
+<style>
+
+/* =========================================
+RESET
+========================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    min-height:100%;
+    overflow-x:hidden;
+    background:#0033cc;
+    font-family:'Share Tech Mono', monospace;
+    color:#fff;
+}
+
+/* =========================================
+APP
+========================================= */
+
+.app{
+    width:100%;
+    min-height:100vh;
+    padding:10px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+/* =========================================
+HEADER
+========================================= */
+
+.header{
+    border:2px solid #fff;
+    padding:10px;
+    text-align:center;
+}
+
+.title{
+    font-size:16px;
+    letter-spacing:3px;
+}
+
+.sub{
+    font-size:12px;
+    color:#99ffcc;
+    margin-top:5px;
+}
+
+/* =========================================
+WINDOW
+========================================= */
+
+.window{
+    flex:1;
+    border:2px solid #fff;
+    padding:10px;
+    overflow:auto;
+    box-shadow:6px 6px 0 #000;
+}
+
+/* =========================================
+SEARCH
+========================================= */
+
+.search-box{
+    width:100%;
+    height:40px;
+    background:#9fc3ff;
+    border:1px solid #fff;
+    color:#0033cc;
+    padding:8px;
+    font-size:12px;
+    margin-bottom:10px;
+    outline:none;
+}
+
+.search-box::placeholder{
+    color:#0033cc;
+}
+
+/* =========================================
+TABLE
+========================================= */
+
+table{
+    width:100%;
+    min-width:800px; /* important for scroll */
+    border-collapse:collapse;
+}
+
+thead{
+    background:#9fc3ff;
+    position:sticky;
+    top:0;
+    color:#0033cc;
+}
+
+th,td{
+    border:1px solid rgba(255,255,255,0.3);
+    padding:8px;
+    font-size:12px;
+    text-align:left;
+}
+
+/* hover optional (mobile ignore) */
+tbody tr:hover{
+    background:rgba(255,255,255,0.08);
+}
+
+/* =========================================
+NO DATA
+========================================= */
+
+.no-data{
+    text-align:center;
+    padding:30px;
+    font-size:14px;
+}
+
+/* =========================================
+STATUS
+========================================= */
+
+.status{
+    margin-top:10px;
+    border:1px solid #fff;
+    background:#0027a0;
+    padding:8px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    font-size:10px;
+    text-align:center;
+}
+
+.shortcuts{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+    color:#99ffcc;
+}
+
+/* =========================================
+TABLET
+========================================= */
+
+@media(min-width:768px){
+
+    .title{
+        font-size:24px;
+    }
+
+    .sub{
+        font-size:16px;
+    }
+
+    .search-box{
+        height:55px;
+        font-size:16px;
+    }
+
+    th,td{
+        font-size:16px;
+        padding:12px;
+    }
+
+    table{
+        min-width:100%;
+    }
+
+    .status{
+        flex-direction:row;
+        justify-content:space-between;
+        font-size:14px;
+    }
+}
+
+/* =========================================
+DESKTOP
+========================================= */
+
+@media(min-width:1200px){
+
+    .window{
+        max-width:1200px;
+        margin:auto;
+        padding:20px;
+    }
+
+    .title{
+        font-size:42px;
+    }
+
+    .search-box{
+        font-size:20px;
+        height:60px;
+    }
+
+    th,td{
+        font-size:20px;
+        padding:16px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="title">
+            PARTY VIEW
+        </div>
+
+        <div class="sub">
+            ALL REGISTERED PARTIES
+        </div>
+
+    </div>
+
+    <!-- WINDOW -->
+
+    <div class="window">
+
+        <!-- SEARCH -->
+
+        <input type="text"
+               id="searchBox"
+               class="search-box"
+               placeholder="SEARCH PARTY NAME OR PCODE...">
+
+        <!-- TABLE -->
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>SR.</th>
+
+                    <th>PARTY NAME</th>
+
+                    <th>PCODE</th>
+
+                    <th>GENERAL</th>
+
+                    <th>PART</th>
+
+                    <th>C/IN</th>
+
+                    <th>C/OUT</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="partyTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- STATUS -->
+
+    <div class="status">
+
+        <div class="shortcuts">
+
+            <div>ESC = DASHBOARD</div>
+
+            <div>F5 = REFRESH</div>
+
+            <div>SEARCH ENABLED</div>
+
+        </div>
+
+        <div id="totalParties">
+
+            TOTAL : 0
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* =========================================
+SECURITY
+========================================= */
+
+if(
+    localStorage.getItem('admin_login')
+    !== 'true'
+){
+
+    window.location.href =
+        'index.html';
+
+}
+
+/* =========================================
+ELEMENTS
+========================================= */
+
+const table =
+    document.getElementById('partyTable');
+
+const totalParties =
+    document.getElementById('totalParties');
+
+const searchBox =
+    document.getElementById('searchBox');
+
+/* =========================================
+GET PARTIES
+========================================= */
+
+let parties =
+    JSON.parse(
+        localStorage.getItem('parties')
+    ) || [];
+
+/* =========================================
+RENDER TABLE
+========================================= */
+
+function renderTable(data){
+
+    table.innerHTML = '';
+
+    if(data.length === 0){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td colspan="7"
+                    class="no-data">
+
+                    NO PARTY FOUND
+
+                </td>
+
+            </tr>
+
+        `;
+
+        totalParties.innerHTML =
+            'TOTAL : 0';
+
+        return;
+
+    }
+
+    data.forEach((party,index)=>{
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${index + 1}</td>
+
+                <td>${party.name || '-'}</td>
+
+                <td>${party.code || '-'}</td>
+
+                <td>${party.type || '-'}</td>
+
+                <td>${party.partnership || '-'}</td>
+
+                <td>${party.commissionIn || '-'}</td>
+
+                <td>${party.commissionOut || '-'}</td>
+
+            </tr>
+
+        `;
+
+    });
+
+    totalParties.innerHTML =
+        'TOTAL : ' + data.length;
+
+}
+
+/* =========================================
+SEARCH
+========================================= */
+
+searchBox.addEventListener(
+    'input',
+    function(){
+
+    const value =
+        this.value.toLowerCase();
+
+    const filtered =
+        parties.filter(party =>
+
+            party.name
+            .toLowerCase()
+            .includes(value)
+
+            ||
+
+            party.code
+            .toLowerCase()
+            .includes(value)
+
+        );
+
+    renderTable(filtered);
+
+});
+
+/* =========================================
+KEYBOARD
+========================================= */
+
+document.addEventListener(
+    'keydown',
+    function(e){
+
+    /* ESC */
+
+    if(e.key === 'Escape'){
+
+        window.location.href =
+            'dashboard.html';
+
+    }
+
+    /* F5 */
+
+    if(e.key === 'F5'){
+
+        e.preventDefault();
+
+        parties =
+            JSON.parse(
+                localStorage.getItem('parties')
+            ) || [];
+
+        renderTable(parties);
+
+    }
+
+});
+
+/* =========================================
+INIT
+========================================= */
+
+renderTable(parties);
+
+searchBox.focus();
+
+/* =========================================
+DISABLE RIGHT CLICK
+========================================= */
+
+document.addEventListener(
+    'contextmenu',
+    function(e){
+
+        e.preventDefault();
+
+    }
+);
+
+/* =========================================
+DISABLE SELECT
+========================================= */
+
+document.addEventListener(
+    'selectstart',
+    function(e){
+
+        e.preventDefault();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

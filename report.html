@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<link rel="manifest" href="manifest.json">
+
+<title>REPORT CENTER</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
+      rel="stylesheet">
+
+<style>
+
+/* =========================
+RESET + BASE (MOBILE FIRST)
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#0033cc;
+    font-family:'Share Tech Mono', monospace;
+    color:#ffffff;
+    font-size:14px;
+}
+
+/* =========================
+APP LAYOUT
+========================= */
+
+.app{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    padding:8px;
+    gap:8px;
+}
+
+/* =========================
+HEADER (MOBILE FIRST)
+========================= */
+
+.header{
+    border:2px solid #ffffff;
+    padding:12px;
+    text-align:center;
+}
+
+.main-title{
+    font-size:22px;
+    letter-spacing:2px;
+    margin-bottom:6px;
+}
+
+.sub-title{
+    font-size:14px;
+    color:#99ffcc;
+}
+
+/* =========================
+TAB BAR (MOBILE FIRST)
+========================= */
+
+.tab-bar{
+    border:2px solid #ffffff;
+    padding:8px;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.tab-btn{
+    flex:1;
+    min-width:90px;
+    border:2px solid #ffffff;
+    background:#0033cc;
+    color:#ffffff;
+    padding:10px;
+    font-size:14px;
+    cursor:pointer;
+    transition:0.1s;
+}
+
+.tab-btn.active{
+    background:#9fc3ff;
+    color:#0033cc;
+    box-shadow:6px 6px 0px #000;
+}
+
+/* =========================
+CONTENT AREA
+========================= */
+
+.content{
+    flex:1;
+    border:2px solid #ffffff;
+    padding:10px;
+    overflow:auto;
+}
+
+/* =========================
+SECTION TITLE
+========================= */
+
+.section-title{
+    font-size:18px;
+    margin-bottom:12px;
+    color:#ff66cc;
+}
+
+/* =========================
+SUMMARY GRID (MOBILE)
+========================= */
+
+.summary-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.summary-box{
+    border:2px solid #ffffff;
+    padding:12px;
+    text-align:center;
+    background:#0027a0;
+}
+
+.summary-title{
+    font-size:13px;
+    margin-bottom:6px;
+    color:#99ffcc;
+}
+
+.summary-value{
+    font-size:20px;
+}
+
+/* =========================
+TABLE
+========================= */
+
+.table-box{
+    border:2px solid #ffffff;
+    overflow:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:600px; /* important for mobile scroll */
+}
+
+thead{
+    background:#89a8ff;
+    color:#0033cc;
+    position:sticky;
+    top:0;
+}
+
+th{
+    padding:10px;
+    text-align:left;
+    font-size:13px;
+    white-space:nowrap;
+}
+
+td{
+    padding:10px;
+    font-size:13px;
+    border-bottom:1px solid rgba(255,255,255,0.2);
+    white-space:nowrap;
+}
+
+tbody tr:hover{
+    background:rgba(255,255,255,0.08);
+}
+
+/* =========================
+STATUS COLORS
+========================= */
+
+.green{ color:#00ff66; }
+.red{ color:#ff5555; }
+.yellow{ color:#ffee58; }
+
+/* =========================
+HELP BAR
+========================= */
+
+.help-bar{
+    border:2px solid #ffffff;
+    background:#0027a0;
+    padding:8px;
+    text-align:center;
+    font-size:12px;
+    color:#99ffcc;
+}
+
+/* =========================
+TABLET (>=600px)
+========================= */
+
+@media(min-width:600px){
+
+    .main-title{
+        font-size:32px;
+    }
+
+    .sub-title{
+        font-size:18px;
+    }
+
+    .summary-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .tab-btn{
+        font-size:16px;
+        padding:12px;
+    }
+
+    th, td{
+        font-size:14px;
+    }
+}
+
+/* =========================
+DESKTOP (>=1000px)
+========================= */
+
+@media(min-width:1000px){
+
+    .app{
+        padding:12px;
+    }
+
+    .main-title{
+        font-size:42px;
+        letter-spacing:5px;
+    }
+
+    .sub-title{
+        font-size:22px;
+    }
+
+    .summary-grid{
+        grid-template-columns:repeat(4,1fr);
+    }
+
+    .tab-btn{
+        font-size:20px;
+        padding:14px 25px;
+    }
+
+    .section-title{
+        font-size:34px;
+    }
+
+    th{
+        font-size:18px;
+        padding:14px;
+    }
+
+    td{
+        font-size:18px;
+        padding:12px;
+    }
+
+    .help-bar{
+        font-size:16px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="main-title">
+            REPORT CENTER
+        </div>
+
+        <div class="sub-title">
+            MATCHES | BETS | PLAYERS REPORT SYSTEM
+        </div>
+
+    </div>
+
+    <!-- TAB BAR -->
+
+    <div class="tab-bar">
+
+        <button class="tab-btn active"
+                data-tab="MATCHES">
+
+            MATCHES
+
+        </button>
+
+        <button class="tab-btn"
+                data-tab="BETS">
+
+            BETS
+
+        </button>
+
+        <button class="tab-btn"
+                data-tab="PLAYERS">
+
+            PLAYERS
+
+        </button>
+
+    </div>
+
+    <!-- CONTENT -->
+
+    <div class="content"
+         id="contentArea">
+
+    </div>
+
+    <!-- HELP -->
+
+    <div class="help-bar">
+
+        TAB = SWITCH REPORT |
+        ESC = DASHBOARD |
+        DELETE = REMOVE ENTRY
+
+    </div>
+
+</div>
+
+<script>
+
+/* =========================================
+SECURITY
+========================================= */
+
+if(
+    localStorage.getItem('admin_login')
+    !== 'true'
+){
+
+    window.location.href =
+        'index.html';
+
+}
+
+/* =========================================
+LOAD STORAGE
+========================================= */
+
+const matches =
+    JSON.parse(
+        localStorage.getItem('matches')
+    ) || [];
+
+const bets =
+    JSON.parse(
+        localStorage.getItem('bet_entries')
+    ) || [];
+
+const parties =
+    JSON.parse(
+        localStorage.getItem('parties')
+    ) || [];
+
+/* =========================================
+ELEMENTS
+========================================= */
+
+const tabButtons =
+    document.querySelectorAll('.tab-btn');
+
+const contentArea =
+    document.getElementById('contentArea');
+
+let currentTab = 0;
+
+/* =========================================
+RENDER MATCHES
+========================================= */
+
+function renderMatches(){
+
+    let totalMatches =
+        matches.length;
+
+    let totalBets =
+        bets.length;
+
+    let totalAmount = 0;
+
+    bets.forEach(item=>{
+
+        totalAmount += Number(
+            item.realAmount || 0
+        );
+
+    });
+
+    contentArea.innerHTML = `
+
+        <div class="section-title">
+
+            MATCH REPORTS
+
+        </div>
+
+        <div class="summary-grid">
+
+            <div class="summary-box">
+
+                <div class="summary-title">
+                    TOTAL MATCHES
+                </div>
+
+                <div class="summary-value">
+                    ${totalMatches}
+                </div>
+
+            </div>
+
+            <div class="summary-box">
+
+                <div class="summary-title">
+                    TOTAL BETS
+                </div>
+
+                <div class="summary-value">
+                    ${totalBets}
+                </div>
+
+            </div>
+
+            <div class="summary-box">
+
+                <div class="summary-title">
+                    TOTAL TURNOVER
+                </div>
+
+                <div class="summary-value green">
+                    ₹${totalAmount}
+                </div>
+
+            </div>
+
+            <div class="summary-box">
+
+                <div class="summary-title">
+                    TOTAL PLAYERS
+                </div>
+
+                <div class="summary-value yellow">
+                    ${parties.length}
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="table-box">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>SR.</th>
+
+                        <th>MATCH NAME</th>
+
+                        <th>MATCH TYPE</th>
+
+                        <th>TOTAL BETS</th>
+
+                        <th>TOTAL AMOUNT</th>
+
+                        <th>STATUS</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    ${
+                        matches.length === 0
+                        ?
+                        `
+                        <tr>
+
+                            <td colspan="6"
+                                style="
+                                    text-align:center;
+                                    padding:50px;
+                                    color:#99ffcc;
+                                ">
+
+                                NO MATCHES ADDED
+
+                            </td>
+
+                        </tr>
+                        `
+                        :
+                        matches.map((match,index)=>{
+
+                            const matchBets =
+                                bets.filter(
+                                    item =>
+                                    item.matchId
+                                    === match.id
+                                );
+
+                            let matchAmount = 0;
+
+                            matchBets.forEach(item=>{
+
+                                matchAmount += Number(
+                                    item.realAmount || 0
+                                );
+
+                            });
+
+                            return `
+
+                                <tr>
+
+                                    <td>
+                                        ${index + 1}
+                                    </td>
+
+                                    <td>
+                                        ${match.teamA}
+                                        VS
+                                        ${match.teamB}
+                                    </td>
+
+                                    <td>
+                                        ${match.type || '-'}
+                                    </td>
+
+                                    <td>
+                                        ${matchBets.length}
+                                    </td>
+
+                                    <td class="green">
+                                        ₹${matchAmount}
+                                    </td>
+
+                                    <td class="yellow">
+                                        ACTIVE
+                                    </td>
+
+                                </tr>
+
+                            `;
+
+                        }).join('')
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    `;
+
+}
+
+/* =========================================
+RENDER BETS
+========================================= */
+
+function renderBets(){
+
+    let totalProfit = 0;
+
+    bets.forEach(item=>{
+
+        const pl =
+            item.betType === 'LAGAI'
+            ?
+            ((item.realAmount * item.bhav)
+            - item.realAmount)
+            :
+            item.realAmount;
+
+        totalProfit += pl;
+
+    });
+
+    contentArea.innerHTML = `
+
+        <div class="section-title">
+
+            BET REPORTS
+
+        </div>
+
+        <div class="summary-grid">
+
+            <div class="summary-box">
+
+                <div class="summary-title">
+                    TOTAL ENTRIES
+                </div>
+
+                <div class="summary-value">
+                    ${bets.length}
+                </div>
+
+            </div>
+
+            <div class="summary-box">
+
+                <div class="summary-title">
+                    TOTAL PROFIT
+                </div>
+
+                <div class="summary-value green">
+                    ₹${totalProfit.toFixed(2)}
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="table-box">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>SR.</th>
+
+                        <th>MATCH</th>
+
+                        <th>TEAM</th>
+
+                        <th>TYPE</th>
+
+                        <th>BHAV</th>
+
+                        <th>POINT</th>
+
+                        <th>AMOUNT</th>
+
+                        <th>PARTY</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    ${
+                        bets.length === 0
+                        ?
+                        `
+                        <tr>
+
+                            <td colspan="8"
+                                style="
+                                    text-align:center;
+                                    padding:40px;
+                                ">
+
+                                NO BETS FOUND
+
+                            </td>
+
+                        </tr>
+                        `
+                        :
+                        bets.map((bet,index)=>{
+
+                            const match =
+                                matches.find(
+                                    item =>
+                                    item.id
+                                    === bet.matchId
+                                );
+
+                            return `
+
+                                <tr>
+
+                                    <td>
+                                        ${index + 1}
+                                    </td>
+
+                                    <td>
+                                        ${
+                                            match
+                                            ?
+                                            match.teamA +
+                                            ' VS ' +
+                                            match.teamB
+                                            :
+                                            '-'
+                                        }
+                                    </td>
+
+                                    <td>
+                                        ${bet.team}
+                                    </td>
+
+                                    <td>
+                                        ${bet.betType}
+                                    </td>
+
+                                    <td>
+                                        ${bet.bhav}
+                                    </td>
+
+                                    <td>
+                                        ${bet.points}
+                                    </td>
+
+                                    <td class="green">
+                                        ₹${bet.realAmount}
+                                    </td>
+
+                                    <td>
+                                        ${bet.partyName}
+                                    </td>
+
+                                </tr>
+
+                            `;
+
+                        }).join('')
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    `;
+
+}
+
+/* =========================================
+RENDER PLAYERS
+========================================= */
+
+function renderPlayers(){
+
+    contentArea.innerHTML = `
+
+        <div class="section-title">
+
+            PLAYER REPORTS
+
+        </div>
+
+        <div class="table-box">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>SR.</th>
+
+                        <th>PARTY NAME</th>
+
+                        <th>PCODE</th>
+
+                        <th>TYPE</th>
+
+                        <th>TOTAL BETS</th>
+
+                        <th>TOTAL AMOUNT</th>
+
+                        <th>CURRENT BALANCE</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    ${
+                        parties.length === 0
+                        ?
+                        `
+                        <tr>
+
+                            <td colspan="7"
+                                style="
+                                    text-align:center;
+                                    padding:40px;
+                                ">
+
+                                NO PLAYERS FOUND
+
+                            </td>
+
+                        </tr>
+                        `
+                        :
+                        parties.map((party,index)=>{
+
+                            const playerBets =
+                                bets.filter(
+                                    item =>
+                                    item.partyCode
+                                    .toUpperCase()
+                                    ===
+                                    party.code
+                                    .toUpperCase()
+                                );
+
+                            let totalAmount = 0;
+
+                            playerBets.forEach(item=>{
+
+                                totalAmount +=
+                                    Number(
+                                        item.realAmount || 0
+                                    );
+
+                            });
+
+                            const balance =
+                                totalAmount * 0.10;
+
+                            return `
+
+                                <tr>
+
+                                    <td>
+                                        ${index + 1}
+                                    </td>
+
+                                    <td>
+                                        ${party.name}
+                                    </td>
+
+                                    <td>
+                                        ${party.code}
+                                    </td>
+
+                                    <td>
+                                        ${party.type}
+                                    </td>
+
+                                    <td>
+                                        ${playerBets.length}
+                                    </td>
+
+                                    <td class="green">
+                                        ₹${totalAmount}
+                                    </td>
+
+                                    <td class="yellow">
+                                        ₹${balance.toFixed(2)}
+                                    </td>
+
+                                </tr>
+
+                            `;
+
+                        }).join('')
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    `;
+
+}
+
+/* =========================================
+OPEN TAB
+========================================= */
+
+function openTab(name){
+
+    tabButtons.forEach(btn=>{
+
+        btn.classList.remove('active');
+
+        if(btn.dataset.tab === name){
+
+            btn.classList.add('active');
+
+        }
+
+    });
+
+    if(name === 'MATCHES'){
+
+        renderMatches();
+
+    }
+
+    if(name === 'BETS'){
+
+        renderBets();
+
+    }
+
+    if(name === 'PLAYERS'){
+
+        renderPlayers();
+
+    }
+
+}
+
+/* =========================================
+TAB CLICK
+========================================= */
+
+tabButtons.forEach((btn,index)=>{
+
+    btn.addEventListener('click',()=>{
+
+        currentTab = index;
+
+        openTab(btn.dataset.tab);
+
+    });
+
+});
+
+/* =========================================
+KEYBOARD
+========================================= */
+
+document.addEventListener(
+    'keydown',
+    function(e){
+
+    /* RIGHT */
+
+    if(e.key === 'ArrowRight'){
+
+        currentTab++;
+
+        if(currentTab >= tabButtons.length){
+
+            currentTab = 0;
+
+        }
+
+        openTab(
+            tabButtons[currentTab]
+            .dataset.tab
+        );
+
+    }
+
+    /* LEFT */
+
+    if(e.key === 'ArrowLeft'){
+
+        currentTab--;
+
+        if(currentTab < 0){
+
+            currentTab =
+                tabButtons.length - 1;
+
+        }
+
+        openTab(
+            tabButtons[currentTab]
+            .dataset.tab
+        );
+
+    }
+
+    /* TAB */
+
+    if(e.key === 'Tab'){
+
+        e.preventDefault();
+
+        currentTab++;
+
+        if(currentTab >= tabButtons.length){
+
+            currentTab = 0;
+
+        }
+
+        openTab(
+            tabButtons[currentTab]
+            .dataset.tab
+        );
+
+    }
+
+    /* ESC */
+
+    if(e.key === 'Escape'){
+
+        window.location.href =
+            'dashboard.html';
+
+    }
+
+});
+
+/* =========================================
+INIT
+========================================= */
+
+openTab('MATCHES');
+
+/* =========================================
+DISABLE RIGHT CLICK
+========================================= */
+
+document.addEventListener(
+    'contextmenu',
+    function(e){
+
+        e.preventDefault();
+
+    }
+);
+
+/* =========================================
+DISABLE SELECT
+========================================= */
+
+document.addEventListener(
+    'selectstart',
+    function(e){
+
+        e.preventDefault();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="manifest" href="manifest.json">
+
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
+      rel="stylesheet">
+
+<title>Party Master</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#0033cc;
+    font-family:'Share Tech Mono', monospace;
+    color:#ffffff;
+}
+
+/* =========================================
+APP
+========================================= */
+
+.app{
+
+    width:100vw;
+    height:100vh;
+
+    border:2px solid #ffffff;
+
+    padding:12px;
+
+    display:flex;
+    flex-direction:column;
+}
+
+/* =========================================
+HEADER
+========================================= */
+
+.header{
+
+    border:2px solid #ffffff;
+
+    padding:20px;
+
+    text-align:center;
+
+    margin-bottom:20px;
+}
+
+.title{
+
+    font-size:42px;
+
+    letter-spacing:5px;
+}
+
+.mode{
+
+    margin-top:10px;
+
+    font-size:22px;
+
+    color:#99ffcc;
+}
+
+/* =========================================
+MAIN WINDOW
+========================================= */
+
+.window{
+
+    flex:1;
+
+    border:2px solid #ffffff;
+
+    padding:35px;
+
+    position:relative;
+
+    box-shadow:15px 15px 0px #000;
+
+    overflow:auto;
+}
+
+/* =========================================
+FORM
+========================================= */
+
+.form-box{
+
+    width:100%;
+
+    max-width:1300px;
+
+    margin:auto;
+}
+
+.form-row{
+
+    display:flex;
+
+    align-items:center;
+
+    margin-bottom:35px;
+
+    gap:25px;
+
+    flex-wrap:wrap;
+}
+
+.label{
+
+    width:260px;
+
+    font-size:30px;
+
+    letter-spacing:2px;
+}
+
+.input-box{
+
+    flex:1;
+
+    height:65px;
+
+    border:2px solid #ffffff;
+
+    background:#9fc3ff;
+
+    color:#0033cc;
+
+    padding:15px;
+
+    font-size:28px;
+
+    outline:none;
+
+    font-family:'Share Tech Mono', monospace;
+}
+
+.input-box::placeholder{
+
+    color:#0033cc;
+}
+
+select.input-box{
+
+    cursor:pointer;
+}
+
+/* =========================================
+PARTY ROW
+========================================= */
+
+.party-group{
+
+    display:flex;
+
+    gap:20px;
+
+    flex:1;
+}
+
+.code-box{
+
+    width:220px;
+}
+
+/* =========================================
+BUTTONS
+========================================= */
+
+.button-row{
+
+    margin-top:60px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+}
+
+.btn{
+
+    flex:1;
+
+    height:75px;
+
+    border:2px solid #ffffff;
+
+    background:#0033cc;
+
+    color:#ffffff;
+
+    font-size:32px;
+
+    cursor:pointer;
+
+    transition:0.1s;
+
+    font-family:'Share Tech Mono', monospace;
+}
+
+.btn:hover,
+.btn.active{
+
+    background:#9fc3ff;
+
+    color:#0033cc;
+
+    box-shadow:10px 10px 0px #000;
+}
+
+/* =========================================
+TABLE
+========================================= */
+
+.table-box{
+
+    margin-top:50px;
+
+    border:2px solid #ffffff;
+
+    max-height:300px;
+
+    overflow:auto;
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+thead{
+
+    background:#89a8ff;
+
+    color:#0033cc;
+
+    position:sticky;
+
+    top:0;
+}
+
+th,
+td{
+
+    padding:15px;
+
+    text-align:left;
+
+    font-size:20px;
+
+    border-bottom:1px solid rgba(255,255,255,0.2);
+}
+
+/* =========================================
+TOAST
+========================================= */
+
+.toast{
+
+    position:fixed;
+
+    top:40px;
+
+    right:-500px;
+
+    background:#9fc3ff;
+
+    color:#0033cc;
+
+    border:2px solid #ffffff;
+
+    padding:18px 35px;
+
+    font-size:24px;
+
+    box-shadow:10px 10px 0px #000;
+
+    transition:0.4s;
+
+    z-index:9999;
+}
+
+.toast.show{
+
+    right:40px;
+}
+
+/* =========================================
+HELP BAR
+========================================= */
+
+.help{
+
+    margin-top:15px;
+
+    border:2px solid #ffffff;
+
+    background:#0027a0;
+
+    padding:12px;
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:35px;
+
+    font-size:20px;
+
+    color:#99ffcc;
+
+    flex-wrap:wrap;
+}
+
+/* ADD THIS ONLY */
+.validation-msg{
+    margin-top:8px;
+    font-size:18px;
+    color:#ffcccc;
+}
+
+.input-error{
+    border-color:#ff4d4d !important;
+    box-shadow:0 0 10px #ff4d4d;
+}
+
+.input-success{
+    border-color:#00ff99 !important;
+    box-shadow:0 0 10px #00ff99;
+}
+
+/* =========================================
+RESPONSIVE
+========================================= */
+
+@media(max-width:1000px){
+
+    .form-row{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+    }
+
+    .label{
+
+        width:100%;
+    }
+
+    .party-group{
+
+        width:100%;
+
+        flex-direction:column;
+    }
+
+    .code-box{
+
+        width:100%;
+    }
+
+    .button-row{
+
+        flex-direction:column;
+    }
+
+    .title{
+
+        font-size:28px;
+    }
+
+    .input-box{
+
+        font-size:22px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="header">
+        <div class="title">PARTY MASTER</div>
+        <div class="mode" id="modeText">CREATE PARTY</div>
+    </div>
+
+    <div class="window">
+
+        <div class="form-box">
+
+            <!-- PARTY CODE -->
+            <div class="form-row">
+
+                <div class="label">PARTY CODE :-</div>
+
+                <div class="party-group" style="flex-direction:column; align-items:flex-start;">
+
+                    <input type="text"
+                           id="partyCode"
+                           class="input-box code-box"
+                           placeholder="PCODE">
+
+                    <!-- LIVE VALIDATION MESSAGE -->
+                    <div id="codeMsg" class="validation-msg"></div>
+
+                </div>
+
+                <input type="text"
+                       id="partyName"
+                       class="input-box"
+                       placeholder="PARTY NAME">
+
+            </div>
+
+            <!-- LEDGER TYPE -->
+            <div class="form-row">
+                <div class="label">LEDGER TYPE :-</div>
+
+                <select id="ledgerType" class="input-box">
+                    <option value="SELECT ROLE">SELECT ROLE</option>
+                    <option value="PLAYER">PLAYER</option>
+                    <option value="MASTER PLAYER">MASTER PLAYER</option>
+                    <option value="CUTTING">CUTTING</option>
+                    <option value="MASTER">MASTER</option>
+                    <option value="PARTNER">PARTNER</option>
+                    <option value="CASH/AC">CASH/AC</option>
+                </select>
+            </div>
+
+            <!-- PARTNERSHIP -->
+            <div class="form-row">
+                <div class="label">PARTNERSHIP % :-</div>
+
+                <input type="text"
+                       id="partnership"
+                       class="input-box code-box"
+                       placeholder="PARTNERSHIP %">
+            </div>
+
+            <!-- COMMISSION -->
+            <div class="form-row">
+                <div class="label">COMMISSION IN/OUT :-</div>
+
+                <input type="text"
+                       id="commissionIn"
+                       class="input-box code-box"
+                       placeholder="COMMISSION IN %">
+
+                <input type="text"
+                       id="commissionOut"
+                       class="input-box code-box"
+                       placeholder="COMMISSION OUT %">
+            </div>
+
+            <!-- FIXED MISSING DIV ISSUE HERE -->
+            <div class="form-row">
+                <div class="label">REMARK :-</div>
+
+                <input type="text"
+                       id="remark"
+                       class="input-box"
+                       placeholder="ENTER REMARK">
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="button-row">
+
+                <button class="btn active" id="saveBtn">SAVE</button>
+
+                <button class="btn" id="rejectBtn">REJECT</button>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="toast" id="toast">USER CREATED!</div>
+
+<script>
+
+/* ===============================
+SECURITY
+=============================== */
+if(localStorage.getItem('admin_login') !== 'true'){
+    window.location.href = 'index.html';
+}
+
+/* ===============================
+ELEMENTS
+=============================== */
+const partyCode = document.getElementById('partyCode');
+const partyName = document.getElementById('partyName');
+const ledgerType = document.getElementById('ledgerType');
+const partnership = document.getElementById('partnership');
+const commissionIn = document.getElementById('commissionIn');
+const commissionOut = document.getElementById('commissionOut');
+const remark = document.getElementById('remark');
+
+const saveBtn = document.getElementById('saveBtn');
+const rejectBtn = document.getElementById('rejectBtn');
+
+const toast = document.getElementById('toast');
+const codeMsg = document.getElementById('codeMsg');
+
+/* ===============================
+DATA
+=============================== */
+let parties = JSON.parse(localStorage.getItem('parties')) || [];
+
+/* ===============================
+MODE
+=============================== */
+const mode = localStorage.getItem('party_mode') || 'ADD';
+
+/* ===============================
+TOAST
+=============================== */
+function showToast(text){
+    toast.innerHTML = text;
+    toast.classList.add('show');
+
+    setTimeout(()=>{
+        toast.classList.remove('show');
+    },2000);
+}
+
+/* ===============================
+LIVE DUPLICATE CHECK
+=============================== */
+function checkDuplicate(code){
+
+    if(!code) return false;
+
+    const exists = parties.find(p =>
+        p.code.toLowerCase() === code.toLowerCase()
+    );
+
+    return exists ? true : false;
+}
+
+function validateCodeLive(){
+
+    const code = partyCode.value.trim();
+
+    const isDuplicate = checkDuplicate(code);
+
+    /* MODIFY MODE EXCEPTION */
+    if(mode === 'MODIFY'){
+        const original = parties.find(p =>
+            p.code.toLowerCase() === code.toLowerCase()
+        );
+
+        if(original){
+            setValid();
+            codeMsg.innerText = "EXISTING PARTY LOADED";
+            return false;
+        }
+    }
+
+    if(isDuplicate){
+        setInvalid("⚠ PCODE ALREADY EXISTS!");
+        return true;
+    }
+
+    if(code.length > 0){
+        setValid();
+        codeMsg.innerText = "AVAILABLE ✔";
+    }else{
+        codeMsg.innerText = "";
+        partyCode.classList.remove("input-error","input-success");
+    }
+
+    return false;
+}
+
+function setInvalid(msg){
+    partyCode.classList.add("input-error");
+    partyCode.classList.remove("input-success");
+    codeMsg.innerText = msg;
+    saveBtn.disabled = true;
+    saveBtn.style.opacity = "0.5";
+    saveBtn.style.cursor = "not-allowed";
+}
+
+function setValid(){
+    partyCode.classList.remove("input-error");
+    partyCode.classList.add("input-success");
+    saveBtn.disabled = false;
+    saveBtn.style.opacity = "1";
+    saveBtn.style.cursor = "pointer";
+}
+
+/* ===============================
+EVENT LIVE CHECK
+=============================== */
+partyCode.addEventListener("input", validateCodeLive);
+
+function validateCommission(){
+
+    const inVal = parseFloat(commissionIn.value) || 0;
+    const outVal = parseFloat(commissionOut.value) || 0;
+
+    // reset styles
+    commissionIn.classList.remove("input-error");
+    commissionOut.classList.remove("input-error");
+
+    if(commissionIn.value === "" || commissionOut.value === ""){
+        saveBtn.disabled = false;
+        saveBtn.style.opacity = "1";
+        return true;
+    }
+
+    // RULE: IN must be LESS OR EQUAL to OUT
+    if(inVal > outVal){
+
+        commissionIn.classList.add("input-error");
+        commissionOut.classList.add("input-error");
+
+        showToast("COMMISSION IN MUST BE ≤ COMMISSION OUT!");
+
+        saveBtn.disabled = true;
+        saveBtn.style.opacity = "0.5";
+
+        return false;
+    }
+
+    // valid
+    saveBtn.disabled = false;
+    saveBtn.style.opacity = "1";
+
+    return true;
+}
+
+commissionIn.addEventListener("input", validateCommission);
+commissionOut.addEventListener("input", validateCommission);
+
+/* ===============================
+SAVE
+=============================== */
+function saveParty(){
+
+    const code = partyCode.value.trim();
+    const name = partyName.value.trim();
+
+    if(!code || !name){
+        showToast("ENTER REQUIRED FIELDS!");
+        return;
+    }
+
+    /* FINAL DUPLICATE SAFETY */
+    if(mode !== 'MODIFY' && checkDuplicate(code)){
+        showToast("PCODE ALREADY EXISTS!");
+        return;
+    }
+
+    if(mode === 'MODIFY'){
+
+        const index = parties.findIndex(p =>
+            p.code.toLowerCase() === code.toLowerCase()
+        );
+
+        if(index === -1){
+            showToast("PARTY NOT FOUND!");
+            return;
+        }
+
+        parties[index] = {
+            ...parties[index],
+            code,
+            name,
+            type: ledgerType.value,
+            partnership: partnership.value,
+            commissionIn: commissionIn.value,
+            commissionOut: commissionOut.value,
+            remark: remark.value
+        };
+
+        localStorage.setItem("parties", JSON.stringify(parties));
+
+        showToast("PARTY UPDATED!");
+        clearForm();
+        return;
+    }
+
+    const newParty = {
+        id: Date.now(),
+        code,
+        name,
+        type: ledgerType.value,
+        partnership: partnership.value,
+        commissionIn: commissionIn.value,
+        commissionOut: commissionOut.value,
+        remark: remark.value
+    };
+
+    parties.push(newParty);
+
+    localStorage.setItem("parties", JSON.stringify(parties));
+
+    showToast("USER CREATED!");
+    clearForm();
+}
+
+/* ===============================
+CLEAR
+=============================== */
+function clearForm(){
+    partyCode.value = "";
+    partyName.value = "";
+    ledgerType.value = "SELECT ROLE";
+    partnership.value = "";
+    commissionIn.value = "";
+    commissionOut.value = "";
+    remark.value = "";
+
+    partyCode.classList.remove("input-error","input-success");
+    codeMsg.innerText = "";
+    partyCode.focus();
+
+    saveBtn.disabled = false;
+}
+
+/* ===============================
+BUTTONS
+=============================== */
+saveBtn.addEventListener("click", saveParty);
+rejectBtn.addEventListener("click", clearForm);
+
+/* INIT */
+partyCode.focus();
+
+/* ===============================
+KEYBOARD SHORTCUTS
+=============================== */
+
+document.addEventListener("keydown", function(e){
+
+    const key = e.key.toLowerCase();
+
+    /* ENTER = SAVE */
+    if(key === "enter"){
+        e.preventDefault();
+        if(saveBtn.disabled) return;
+        saveParty();
+    }
+
+    /* ESC = DASHBOARD */
+    if(key === "escape"){
+        window.location.href = "dashboard.html";
+    }
+
+    /* F2 = CLEAR FORM */
+    if(e.key === "F2"){
+        e.preventDefault();
+        clearForm();
+    }
+
+    /* ALT + C = CLEAR (extra safety shortcut) */
+    if(e.altKey && key === "c"){
+        clearForm();
+    }
+
+});
+
+</script>
+
+</body>
+</html>

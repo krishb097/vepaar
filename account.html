@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<link rel="manifest" href="manifest.json">
+
+<title>ACCOUNT MANAGEMENT</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
+      rel="stylesheet">
+
+<style>
+
+/* =========================
+RESET + BASE (MOBILE FIRST)
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#0033cc;
+    font-family:'Share Tech Mono', monospace;
+    color:#ffffff;
+    font-size:14px;
+}
+
+/* =========================
+APP LAYOUT
+========================= */
+
+.app{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    padding:8px;
+    gap:8px;
+}
+
+/* =========================
+HEADER
+========================= */
+
+.header{
+    border:2px solid #ffffff;
+    padding:10px;
+}
+
+.header-top{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    text-align:center;
+}
+
+.title{
+    font-size:20px;
+    letter-spacing:2px;
+}
+
+.mode{
+    font-size:14px;
+    color:#99ffcc;
+}
+
+.datetime{
+    margin-top:8px;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    font-size:12px;
+    text-align:center;
+}
+
+/* =========================
+MAIN LAYOUT (MOBILE STACK)
+========================= */
+
+.main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+/* =========================
+PANELS
+========================= */
+
+.left-panel,
+.right-panel{
+    width:100%;
+    border:2px solid #ffffff;
+    padding:10px;
+    overflow:auto;
+}
+
+/* =========================
+FORM
+========================= */
+
+.form-box{
+    border:2px solid #ffffff;
+    padding:12px;
+    margin-bottom:10px;
+}
+
+.form-title{
+    font-size:18px;
+    margin-bottom:10px;
+    color:#ff66cc;
+    text-align:center;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:5px;
+    font-size:14px;
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+    height:45px;
+    border:none;
+    outline:none;
+    background:#9fc3ff;
+    color:#0033cc;
+    padding:8px;
+    font-size:14px;
+    font-family:'Share Tech Mono', monospace;
+}
+
+.party-name{
+    margin-top:5px;
+    font-size:12px;
+    color:#99ffcc;
+    min-height:16px;
+}
+
+/* =========================
+BUTTONS
+========================= */
+
+.button-row{
+    margin-top:12px;
+    display:flex;
+    gap:8px;
+}
+
+.btn{
+    flex:1;
+    height:45px;
+    border:2px solid #ffffff;
+    background:#0033cc;
+    color:#ffffff;
+    font-size:14px;
+    cursor:pointer;
+}
+
+.btn:hover{
+    background:#9fc3ff;
+    color:#0033cc;
+    box-shadow:4px 4px 0px #000;
+}
+
+/* =========================
+INFO BOX
+========================= */
+
+.info-box{
+    border:2px solid #ffffff;
+    padding:12px;
+    margin-bottom:10px;
+}
+
+.info-title{
+    font-size:16px;
+    margin-bottom:10px;
+    color:#ff66cc;
+    text-align:center;
+}
+
+.info-line{
+    font-size:13px;
+    margin-bottom:6px;
+}
+
+.green{ color:#00ff66; }
+.red{ color:#ff4444; }
+
+/* =========================
+TABLE
+========================= */
+
+.table-box{
+    border:2px solid #ffffff;
+    height:250px;
+    overflow:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:600px;
+}
+
+thead{
+    background:#89a8ff;
+    color:#0033cc;
+    position:sticky;
+    top:0;
+}
+
+th, td{
+    padding:8px;
+    font-size:12px;
+    text-align:left;
+    border-bottom:1px solid rgba(255,255,255,0.2);
+    white-space:nowrap;
+}
+
+tbody tr.active{
+    background:#9fc3ff;
+    color:#0033cc;
+}
+
+/* =========================
+HELP BAR
+========================= */
+
+.help-bar{
+    border:2px solid #ffffff;
+    background:#0027a0;
+    padding:8px;
+    text-align:center;
+    font-size:11px;
+    color:#99ffcc;
+}
+
+/* =========================
+TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    top:20px;
+    right:-300px;
+    background:#9fc3ff;
+    color:#0033cc;
+    border:2px solid #ffffff;
+    padding:12px 18px;
+    font-size:14px;
+    transition:0.3s;
+    z-index:9999;
+}
+
+.toast.show{
+    right:20px;
+}
+
+/* =========================
+TABLET (600px+)
+========================= */
+
+@media(min-width:600px){
+
+    .header-top{
+        flex-direction:row;
+        justify-content:space-between;
+        text-align:left;
+    }
+
+    .datetime{
+        flex-direction:row;
+        justify-content:space-between;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .title{
+        font-size:26px;
+    }
+
+    .mode{
+        font-size:18px;
+    }
+
+    .help-bar{
+        font-size:13px;
+    }
+
+    .table-box{
+        height:320px;
+    }
+}
+
+/* =========================
+DESKTOP (1000px+)
+========================= */
+
+@media(min-width:1000px){
+
+    .main{
+        flex-direction:row;
+    }
+
+    .left-panel{
+        width:72%;
+    }
+
+    .right-panel{
+        width:28%;
+    }
+
+    .title{
+        font-size:38px;
+        letter-spacing:4px;
+    }
+
+    .mode{
+        font-size:24px;
+    }
+
+    .form-title{
+        font-size:28px;
+    }
+
+    .form-group label{
+        font-size:20px;
+    }
+
+    .form-group input,
+    .form-group select{
+        height:55px;
+        font-size:22px;
+    }
+
+    .btn{
+        height:60px;
+        font-size:22px;
+    }
+
+    th, td{
+        font-size:16px;
+        padding:12px;
+    }
+
+    .table-box{
+        height:420px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="header-top">
+
+            <div class="title">
+                ACCOUNT MANAGEMENT
+            </div>
+
+            <div class="mode"
+                 id="modeText">
+
+                HAVALA
+
+            </div>
+
+        </div>
+
+        <div class="datetime">
+
+            <div id="dateBox">
+                DATE :-
+            </div>
+
+            <div id="timeBox">
+                TIME :-
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+        <!-- LEFT -->
+
+        <div class="left-panel">
+
+            <!-- FORM -->
+
+            <div class="form-box">
+
+                <div class="form-title">
+                    MONEY TRANSFER ENTRY
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>FROM PARTY CODE</label>
+
+                        <input type="text"
+                               id="fromParty"
+                               placeholder="ENTER PARTY CODE">
+
+                        <div class="party-name"
+                             id="fromPartyName">
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>TO PARTY CODE</label>
+
+                        <input type="text"
+                               id="toParty"
+                               placeholder="ENTER PARTY CODE">
+
+                        <div class="party-name"
+                             id="toPartyName">
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>AMOUNT</label>
+
+                        <input type="number"
+                               id="amount"
+                               placeholder="ENTER AMOUNT">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>TYPE</label>
+                        <H1 style="color: #ff4444; font-weight: 600; padding: auto; margin: 10px;">HAVALA</H1>
+
+                    </div>
+
+                    <div class="form-group"
+                         style="grid-column:1/-1;">
+
+                        <label>REMARK</label>
+
+                        <input type="text"
+                               id="remark"
+                               placeholder="ENTER REMARK">
+
+                    </div>
+
+                </div>
+
+                <div class="button-row">
+
+                    <button class="btn"
+                            id="saveBtn">
+
+                        SAVE
+
+                    </button>
+
+                    <button class="btn"
+                            id="clearBtn">
+
+                        CLEAR
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="right-panel">
+
+            <div class="info-box">
+
+                <div class="info-title">
+                    SUMMARY
+                </div>
+
+                <div class="info-line"
+                     id="totalEntries">
+
+                    TOTAL ENTRIES : 0
+
+                </div>
+
+                <div class="info-line green"
+                     id="totalCredit">
+
+                    TOTAL CREDIT : 0
+
+                </div>
+
+                <div class="info-line red"
+                     id="totalDebit">
+
+                    TOTAL DEBIT : 0
+
+                </div>
+
+            </div>
+
+            <div class="info-box">
+
+                <div class="info-title">
+                    SHORTCUTS
+                </div>
+
+                <div class="info-line">
+                    ENTER = SAVE
+                </div>
+
+                <div class="info-line">
+                    F2 = CLEAR
+                </div>
+
+                <div class="info-line">
+                    ESC = DASHBOARD
+                </div>
+
+                <div class="info-line">
+                    DELETE = REMOVE
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- HELP -->
+
+    <div class="help-bar">
+
+        HAVALA = MONEY TRANSFER SYSTEM |
+        GENERAL = ALL TRANSACTION REPORT |
+        ENTER = SAVE |
+        ESC = BACK
+
+    </div>
+
+</div>
+
+<!-- TOAST -->
+
+<div class="toast"
+     id="toast">
+
+    ENTRY SAVED!
+
+</div>
+
+<script>
+
+/* =========================================
+SECURITY
+========================================= */
+
+if(
+    localStorage.getItem('admin_login')
+    !== 'true'
+){
+
+    window.location.href =
+        'index.html';
+
+}
+
+/* =========================================
+MODE
+========================================= */
+
+const mode =
+    localStorage.getItem('account_mode')
+    || 'HAVALA';
+
+document.getElementById('modeText')
+.innerHTML = mode;
+
+/* =========================================
+DATE TIME
+========================================= */
+
+function updateDateTime(){
+
+    const now = new Date();
+
+    document.getElementById('dateBox')
+    .innerHTML =
+        'DATE :- ' +
+        now.toLocaleDateString();
+
+    document.getElementById('timeBox')
+    .innerHTML =
+        'TIME :- ' +
+        now.toLocaleTimeString();
+
+}
+
+setInterval(updateDateTime,1000);
+
+updateDateTime();
+
+/* =========================================
+ELEMENTS
+========================================= */
+
+const fromParty =
+    document.getElementById('fromParty');
+
+const toParty =
+    document.getElementById('toParty');
+
+const amount =
+    document.getElementById('amount');
+
+const remark =
+    document.getElementById('remark');
+
+const table =
+    document.getElementById('transactionTable');
+
+const toast =
+    document.getElementById('toast');
+
+const fromPartyName =
+    document.getElementById('fromPartyName');
+
+const toPartyName =
+    document.getElementById('toPartyName');
+
+/* =========================================
+STORAGE
+========================================= */
+
+let transactions =
+    JSON.parse(
+        localStorage.getItem('transactions')
+    ) || [];
+
+const parties =
+    JSON.parse(
+        localStorage.getItem('parties')
+    ) || [];
+
+/* =========================================
+PARTY FINDER
+========================================= */
+
+function findParty(code){
+
+    return parties.find(
+        item =>
+        item.code.toLowerCase()
+        === code.toLowerCase()
+    );
+
+}
+
+/* =========================================
+SHOW PARTY NAME
+========================================= */
+
+fromParty.addEventListener(
+    'input',
+    ()=>{
+
+        const party =
+            findParty(fromParty.value.trim());
+
+        fromPartyName.innerHTML =
+            party
+            ?
+            party.name
+            :
+            'PARTY NOT FOUND';
+
+    }
+);
+
+toParty.addEventListener(
+    'input',
+    ()=>{
+
+        const party =
+            findParty(toParty.value.trim());
+
+        toPartyName.innerHTML =
+            party
+            ?
+            party.name
+            :
+            'PARTY NOT FOUND';
+
+    }
+);
+
+/* =========================================
+TOAST
+========================================= */
+
+function showToast(text){
+
+    toast.innerHTML = text;
+
+    toast.classList.add('show');
+
+    setTimeout(()=>{
+
+        toast.classList.remove('show');
+
+    },2000);
+
+}
+
+/* =========================================
+CLEAR FORM
+========================================= */
+
+function clearForm(){
+
+    fromParty.value = '';
+    toParty.value = '';
+    amount.value = '';
+    remark.value = '';
+
+    fromPartyName.innerHTML = '';
+    toPartyName.innerHTML = '';
+
+    fromParty.focus();
+
+}
+
+/* =========================================
+SAVE TRANSACTION
+========================================= */
+
+function saveTransaction(){
+
+    const fromCode =
+        fromParty.value.trim();
+
+    const toCode =
+        toParty.value.trim();
+
+    const amountValue =
+        amount.value.trim();
+
+    if(
+        !fromCode
+        ||
+        !toCode
+        ||
+        !amountValue
+    ){
+
+        showToast(
+            'FILL REQUIRED FIELDS!'
+        );
+
+        return;
+
+    }
+
+    const fromData =
+        findParty(fromCode);
+
+    const toData =
+        findParty(toCode);
+
+    if(!fromData){
+
+        showToast(
+            'FROM PARTY INVALID!'
+        );
+
+        return;
+
+    }
+
+    if(!toData){
+
+        showToast(
+            'TO PARTY INVALID!'
+        );
+
+        return;
+
+    }
+
+    const entry = {
+
+        id:Date.now(),
+
+        fromCode:fromCode,
+
+        fromName:fromData.name,
+
+        toCode:toCode,
+
+        toName:toData.name,
+
+        amount:Number(amountValue),
+
+        remark:remark.value.trim(),
+
+        date:new Date().toLocaleString()
+
+    };
+
+    transactions.push(entry);
+
+    localStorage.setItem(
+        'transactions',
+        JSON.stringify(transactions)
+    );
+
+    renderTable();
+
+    clearForm();
+
+    showToast(
+        'ENTRY SAVED!'
+    );
+
+}
+
+/* =========================================
+BUTTONS
+========================================= */
+
+document.getElementById('saveBtn')
+.addEventListener(
+    'click',
+    saveTransaction
+);
+
+document.getElementById('clearBtn')
+.addEventListener(
+    'click',
+    clearForm
+);
+
+/* =========================================
+KEYBOARD
+========================================= */
+
+document.addEventListener(
+    'keydown',
+    function(e){
+
+    if(e.key === 'Enter'){
+
+        e.preventDefault();
+
+        saveTransaction();
+
+    }
+
+    if(e.key === 'F2'){
+
+        e.preventDefault();
+
+        clearForm();
+
+    }
+
+    if(e.key === 'Escape'){
+
+        window.location.href =
+            'dashboard.html';
+
+    }
+
+});
+
+/* =========================================
+INIT
+========================================= */
+
+renderTable();
+
+fromParty.focus();
+
+/* =========================================
+DISABLE RIGHT CLICK
+========================================= */
+
+document.addEventListener(
+    'contextmenu',
+    e=>e.preventDefault()
+);
+
+/* =========================================
+DISABLE SELECT
+========================================= */
+
+document.addEventListener(
+    'selectstart',
+    e=>e.preventDefault()
+);
+
+</script>
+
+</body>
+</html>

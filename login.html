@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<title>Login System</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#0033cc;
+    font-family:Arial, sans-serif;
+}
+
+/* =========================================
+MAIN SCREEN
+========================================= */
+
+.screen{
+    width:100vw;
+    height:100vh;
+
+    background:#0033cc;
+
+    border:2px solid #ffffff;
+
+    position:relative;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* =========================================
+LOGIN BOX
+========================================= */
+
+.login-box{
+
+    width:320px;
+
+    background:#0033cc;
+
+    border:2px solid #ffffff;
+
+    padding:35px 30px;
+
+    position:relative;
+
+    box-shadow:18px 18px 0px #000;
+}
+
+/* =========================================
+TITLE
+========================================= */
+
+.login-title{
+
+    position:absolute;
+
+    top:-16px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    background:#0033cc;
+
+    padding:0 12px;
+
+    color:#ff9ecb;
+
+    font-size:18px;
+
+    font-weight:bold;
+}
+
+/* =========================================
+LABELS
+========================================= */
+
+.label{
+
+    color:#d9e7ff;
+
+    font-size:20px;
+
+    letter-spacing:5px;
+
+    margin-bottom:8px;
+
+    text-align:center;
+
+    font-weight:bold;
+}
+
+/* =========================================
+INPUTS
+========================================= */
+
+.input-box{
+
+    width:100%;
+
+    height:42px;
+
+    border:none;
+
+    outline:none;
+
+    background:#79c6ff;
+
+    color:#666;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    padding:0 15px;
+
+    margin-bottom:25px;
+}
+
+.input-box:focus{
+
+    background:#a8ddff;
+
+}
+
+/* =========================================
+LOGIN BUTTON
+========================================= */
+
+.login-btn{
+
+    width:75px;
+    height:42px;
+
+    border:none;
+    outline:none;
+
+    background:#0b79ff;
+
+    color:#ffffff;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+    display:block;
+
+    margin:0 auto;
+
+    transition:0.2s;
+}
+
+.login-btn:hover{
+
+    transform:scale(1.05);
+
+}
+
+/* =========================================
+ERROR
+========================================= */
+
+.error{
+
+    color:#ffb5b5;
+
+    text-align:center;
+
+    margin-bottom:18px;
+
+    font-size:15px;
+
+    letter-spacing:2px;
+
+    display:none;
+}
+
+/* =========================================
+WHATSAPP
+========================================= */
+
+.whatsapp{
+
+    position:absolute;
+
+    left:30px;
+    bottom:22px;
+
+    color:#32d96b;
+
+    font-size:clamp(24px, 2vw, 38px);
+
+    font-weight:bold;
+}
+
+.whatsapp a{
+
+    color:inherit;
+
+    text-decoration:none;
+}
+
+.whatsapp i{
+
+    font-size:clamp(38px, 3vw, 56px);
+
+    margin-right:10px;
+}
+
+/* =========================================
+SECRET DOT
+========================================= */
+
+.security-dot{
+
+    position:absolute;
+
+    right:8px;
+    bottom:8px;
+
+    width:4px;
+    height:4px;
+
+    background:#000;
+
+    border-radius:50%;
+
+    opacity:0.5;
+}
+
+/* =========================================
+RESPONSIVE
+========================================= */
+
+@media(max-width:500px){
+
+    .login-box{
+
+        width:90%;
+    }
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="screen">
+
+    <!-- LOGIN BOX -->
+
+    <form class="login-box" id="loginForm" autocomplete="off">
+
+        <div class="login-title">
+            LOGIN HERE
+        </div>
+
+        <!-- ERROR -->
+
+        <div class="error" id="errorBox">
+            INVALID USERNAME OR PASSWORD
+        </div>
+
+        <!-- USERNAME -->
+
+        <div class="label">
+            USER NAME
+        </div>
+
+        <input 
+            type="text" 
+            id="username"
+            class="input-box"
+            placeholder="User Name"
+            autofocus
+            required
+        >
+
+        <!-- PASSWORD -->
+
+        <div class="label">
+            PASSWORD
+        </div>
+
+        <input 
+            type="password" 
+            id="password"
+            class="input-box"
+            placeholder="Password"
+            required
+        >
+
+        <!-- BUTTON -->
+
+        <button type="submit" class="login-btn">
+            LOGIN
+        </button>
+
+    </form>
+
+    <!-- WHATSAPP -->
+
+    <div class="whatsapp">
+
+        <a href="https://wa.me/447452210670?text=Hello" target="_blank">
+
+            <i class="fab fa-whatsapp"></i>
+
+            WhatsApp
+
+        </a>
+
+    </div>
+
+    <!-- DOT -->
+
+    <div class="security-dot"></div>
+
+</div>
+
+<script>
+
+/* =========================================
+SECURITY ACCESS CHECK
+========================================= */
+
+if(localStorage.getItem('security_access') !== 'granted'){
+
+    window.location.href = 'index.html';
+
+}
+
+/* =========================================
+DEFAULT CREDENTIALS
+========================================= */
+
+const defaultUsername = "admin";
+
+/* FIRST TIME DEFAULT PASSWORD */
+
+if(
+    !localStorage.getItem('admin_password')
+){
+
+    localStorage.setItem(
+        'admin_password',
+        '123456'
+    );
+
+}
+
+/* =========================================
+LOGIN SYSTEM
+========================================= */
+
+const loginForm = document.getElementById('loginForm');
+
+loginForm.addEventListener('submit', function(e){
+
+    e.preventDefault();
+
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    const errorBox = document.getElementById('errorBox');
+
+    const savedPassword = localStorage.getItem('admin_password');
+
+    if(username === defaultUsername && password === savedPassword){
+
+        localStorage.setItem('admin_login', 'true');
+
+        localStorage.setItem('dashboard_access', 'granted');
+
+        window.location.href = 'dashboard.html';
+
+    }else{
+
+        errorBox.style.display = 'block';
+
+    }
+
+});
+
+
+/* =========================================
+ESC CLEAR INPUTS
+========================================= */
+
+document.addEventListener('keydown', function(e){
+
+    if(e.key === 'Escape'){
+
+        document.getElementById('username').value = '';
+        document.getElementById('password').value = '';
+
+        document.getElementById('errorBox').style.display = 'none';
+
+    }
+
+});
+
+
+/* =========================================
+DISABLE RIGHT CLICK
+========================================= */
+
+document.addEventListener('contextmenu', function(e){
+
+    e.preventDefault();
+
+});
+
+
+/* =========================================
+DISABLE TEXT SELECT
+========================================= */
+
+document.addEventListener('selectstart', function(e){
+
+    e.preventDefault();
+
+});
+
+</script>
+
+</body>
+</html>

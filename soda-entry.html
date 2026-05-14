@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+
+<title>SODA ENTRY</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
+      rel="stylesheet">
+
+<style>
+
+/* =========================================
+RESET
+========================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    min-height:100%;
+    overflow-x:hidden;
+    background:#0033cc;
+    font-family:'Share Tech Mono', monospace;
+    color:#fff;
+}
+
+body{
+    min-height:100vh;
+    min-height:100dvh;
+}
+
+/* =========================================
+APP
+========================================= */
+
+.app{
+    width:100%;
+    min-height:100vh;
+    min-height:100dvh;
+    padding:8px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+/* =========================================
+HEADER
+========================================= */
+
+.header{
+    border:2px solid #fff;
+    padding:10px;
+}
+
+.header-top{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    text-align:center;
+}
+
+.system-title{
+    font-size:14px;
+    letter-spacing:3px;
+}
+
+.match-type{
+    font-size:12px;
+    color:#ff66cc;
+}
+
+.match-name{
+    text-align:center;
+    font-size:16px;
+    letter-spacing:2px;
+    margin-top:8px;
+}
+
+/* =========================================
+MAIN LAYOUT (FIXED)
+========================================= */
+
+.main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+/* =========================================
+PANELS
+========================================= */
+
+.left-panel,
+.right-panel{
+    width:100%;
+    border:2px solid #fff;
+    padding:8px;
+}
+
+/* =========================================
+RATE BOARD (MOBILE FIX)
+========================================= */
+
+.rate-board{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-bottom:10px;
+}
+
+.team-box{
+    border:1px solid #fff;
+    padding:12px;
+    text-align:center;
+    cursor:pointer;
+    border-radius:4px;
+}
+
+.team-box:active{
+    transform:scale(0.98);
+}
+
+.team-box.active{
+    background:#9fc3ff;
+    color:#0033cc;
+}
+
+.team-name{
+    font-size:16px;
+}
+
+.team-rate{
+    font-size:20px;
+    color:#00ff66;
+}
+
+/* =========================================
+ENTRY FORM (MOBILE FRIENDLY)
+========================================= */
+
+.entry-form{
+    border:1px solid #fff;
+    padding:10px;
+    margin-bottom:10px;
+}
+
+.form-title{
+    font-size:14px;
+    color:#ff66cc;
+    margin-bottom:10px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+}
+
+.form-group label{
+    font-size:12px;
+    margin-bottom:4px;
+    display:block;
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+    height:42px;
+    border:none;
+    background:#9fc3ff;
+    color:#0033cc;
+    font-size:13px;
+    padding:6px;
+    border-radius:3px;
+}
+
+/* =========================================
+PARTY BOX
+========================================= */
+
+.party-name-box{
+    margin-top:10px;
+    border:1px solid #fff;
+    padding:8px;
+    font-size:12px;
+    color:#99ffcc;
+}
+
+/* =========================================
+SAVE BUTTON
+========================================= */
+
+.save-btn{
+    width:100%;
+    height:42px;
+    margin-top:10px;
+    background:#1565ff;
+    border:none;
+    color:#fff;
+    font-size:14px;
+    cursor:pointer;
+    border-radius:4px;
+}
+
+.save-btn:active{
+    transform:scale(0.98);
+}
+
+/* =========================================
+TABLE (IMPORTANT FIX)
+========================================= */
+
+.table-wrapper{
+    border:1px solid #fff;
+    flex:1;
+    min-height:220px;
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+/* mobile horizontal scroll safe */
+table{
+    width:100%;
+    min-width:750px;
+    border-collapse:collapse;
+}
+
+thead{
+    position:sticky;
+    top:0;
+    background:#89a8ff;
+    z-index:1;
+}
+
+thead th{
+    font-size:12px;
+    padding:6px;
+    text-align:left;
+    color:#0033cc;
+    white-space:nowrap;
+}
+
+tbody td{
+    font-size:12px;
+    padding:6px;
+    border-bottom:1px solid rgba(255,255,255,0.2);
+    white-space:nowrap;
+}
+
+/* =========================================
+INFO BOX
+========================================= */
+
+.info-box{
+    border:1px solid #fff;
+    padding:8px;
+    margin-bottom:8px;
+}
+
+.info-title{
+    font-size:14px;
+    color:#ff66cc;
+    margin-bottom:8px;
+}
+
+.info-line{
+    font-size:12px;
+    margin-bottom:5px;
+}
+
+.green{ color:#00ff66; }
+.red{ color:#ff4444; }
+
+/* =========================================
+HELP BAR
+========================================= */
+
+.help-bar{
+    border:1px solid #fff;
+    background:#0027a0;
+    padding:8px;
+    font-size:10px;
+    text-align:center;
+    color:#99ffcc;
+}
+
+/* =========================================
+TOAST
+========================================= */
+
+.toast{
+    position:fixed;
+    top:20px;
+    right:-400px;
+    background:#9fc3ff;
+    color:#0033cc;
+    padding:10px 18px;
+    font-size:14px;
+    border:2px solid #fff;
+    transition:0.3s;
+    z-index:9999;
+}
+
+.toast.show{
+    right:20px;
+}
+
+/* =========================================
+TABLET
+========================================= */
+
+@media(min-width:768px){
+
+    .header-top{
+        flex-direction:row;
+        justify-content:space-between;
+        align-items:center;
+    }
+
+    .system-title{
+        font-size:18px;
+    }
+
+    .match-name{
+        font-size:26px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    table{
+        min-width:100%;
+    }
+
+    .table-wrapper{
+        min-height:300px;
+    }
+}
+
+/* =========================================
+DESKTOP
+========================================= */
+
+@media(min-width:1200px){
+
+    .main{
+        flex-direction:row;
+    }
+
+    .left-panel{
+        width:72%;
+    }
+
+    .right-panel{
+        width:28%;
+    }
+
+    .form-grid{
+        grid-template-columns:repeat(4,1fr);
+    }
+
+    .match-name{
+        font-size:40px;
+    }
+
+    .system-title{
+        font-size:24px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="header-top">
+
+            <div class="system-title">
+                SRI ACCOUNTING
+            </div>
+
+            <div class="match-type"
+                 id="matchType">
+
+                ONE DAY
+
+            </div>
+
+        </div>
+
+        <div class="match-name"
+             id="matchName">
+
+            INDIA VS PAKISTAN
+
+        </div>
+
+    </div>
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+        <!-- LEFT -->
+
+        <div class="left-panel">
+
+            <!-- RATE BOARD -->
+
+            <div class="rate-board">
+
+                <div class="team-box active"
+                     id="teamABox">
+
+                    <div class="team-name"
+                         id="teamAName">
+
+                        IND
+
+                    </div>
+
+                    <div class="team-rate"
+                         id="teamARate">
+
+                        1.85
+
+                    </div>
+
+                </div>
+
+                <div class="team-box"
+                     id="teamBBox">
+
+                    <div class="team-name"
+                         id="teamBName">
+
+                        PAK
+
+                    </div>
+
+                    <div class="team-rate"
+                         id="teamBRate">
+
+                        2.10
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ENTRY FORM -->
+
+            <div class="entry-form">
+
+                <div class="form-title">
+                    SODA ENTRY
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>TYPE</label>
+
+                        <select id="betType">
+
+                            <option value="LAGAI">
+                                LAGAI
+                            </option>
+
+                            <option value="KHAI">
+                                KHAI
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>BHAV</label>
+
+                        <input type="number"
+                               step="0.01"
+                               id="bhav">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>AMOUNT</label>
+
+                        <input type="number"
+                               id="amount"
+                               placeholder="1 = 1000">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>PARTY CODE</label>
+
+                        <input type="text"
+                               id="partyCode">
+
+                    </div>
+
+                </div>
+
+                <div class="party-name-box"
+                     id="partyNameBox">
+
+                    PARTY NAME : -
+
+                </div>
+
+                <button class="save-btn"
+                        id="saveEntryBtn">
+
+                    SAVE ENTRY
+
+                </button>
+
+            </div>
+
+            <!-- TABLE -->
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>TEAM</th>
+
+                            <th>TYPE</th>
+
+                            <th>BHAV</th>
+
+                            <th>POINT</th>
+
+                            <th>AMOUNT</th>
+
+                            <th>PARTY</th>
+
+                            <th>P/L</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="entryTableBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="right-panel">
+
+            <div class="info-box">
+
+                <div class="info-title">
+                    MATCH INFO
+                </div>
+
+                <div class="info-line"
+                     id="matchStatus">
+
+                    STATUS : LIVE
+
+                </div>
+
+                <div class="info-line"
+                     id="totalEntries">
+
+                    TOTAL ENTRIES : 0
+
+                </div>
+
+            </div>
+
+            <div class="info-box">
+
+                <div class="info-title">
+                    PROFIT / LOSS
+                </div>
+
+                <div class="info-line green"
+                     id="profitBox">
+
+                    PROFIT : 0
+
+                </div>
+
+                <div class="info-line red"
+                     id="lossBox">
+
+                    LOSS : 0
+
+                </div>
+
+            </div>
+
+            <div class="info-box">
+
+                <div class="info-title">
+                    SHORTCUTS
+                </div>
+
+                <div class="info-line">
+                    F2 = CLEAR
+                </div>
+
+                <div class="info-line">
+                    DELETE = REMOVE
+                </div>
+
+                <div class="info-line">
+                    ESC = BACK
+                </div>
+
+                <div class="info-line">
+                    ENTER = SAVE
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- HELP -->
+
+    <div class="help-bar">
+
+        AMOUNT RULE :
+        1 POINT = ₹1000 |
+        LEFT/RIGHT = TEAM |
+        ENTER = SAVE |
+        DELETE = REMOVE
+
+    </div>
+
+</div>
+
+<!-- TOAST -->
+
+<div class="toast"
+     id="toast">
+
+    ENTRY SAVED!
+
+</div>
+
+<script>
+
+/* =========================================
+SECURITY
+========================================= */
+
+if(
+    localStorage.getItem('admin_login')
+    !== 'true'
+    ||
+    localStorage.getItem('dashboard_access')
+    !== 'granted'
+){
+
+    window.location.href =
+        'index.html';
+
+}
+
+/* =========================================
+ACTIVE MATCH
+========================================= */
+
+const activeMatch =
+    JSON.parse(
+        localStorage.getItem('active_match')
+    );
+
+if(!activeMatch){
+
+    window.location.href =
+        'soda.html';
+
+}
+
+/* =========================================
+SET MATCH
+========================================= */
+
+document.getElementById('matchType')
+.innerHTML = activeMatch.type;
+
+document.getElementById('matchName')
+.innerHTML =
+    activeMatch.teamA +
+    ' VS ' +
+    activeMatch.teamB;
+
+document.getElementById('teamAName')
+.innerHTML =
+    activeMatch.teamA;
+
+document.getElementById('teamBName')
+.innerHTML =
+    activeMatch.teamB;
+
+/* =========================================
+RATES
+========================================= */
+
+let teamARate = 1.85;
+let teamBRate = 2.10;
+
+document.getElementById('teamARate')
+.innerHTML = teamARate;
+
+document.getElementById('teamBRate')
+.innerHTML = teamBRate;
+
+/* =========================================
+ACTIVE TEAM
+========================================= */
+
+let activeTeam =
+    activeMatch.teamA;
+
+/* =========================================
+TEAM SELECT
+========================================= */
+
+const teamABox =
+    document.getElementById('teamABox');
+
+const teamBBox =
+    document.getElementById('teamBBox');
+
+teamABox.addEventListener('click',()=>{
+
+    activeTeam =
+        activeMatch.teamA;
+
+    teamABox.classList.add('active');
+
+    teamBBox.classList.remove('active');
+
+    document.getElementById('bhav').value =
+        teamARate;
+
+});
+
+teamBBox.addEventListener('click',()=>{
+
+    activeTeam =
+        activeMatch.teamB;
+
+    teamBBox.classList.add('active');
+
+    teamABox.classList.remove('active');
+
+    document.getElementById('bhav').value =
+        teamBRate;
+
+});
+
+/* =========================================
+LOCAL STORAGE
+========================================= */
+
+let entries =
+    JSON.parse(
+        localStorage.getItem('bet_entries')
+    ) || [];
+
+let parties =
+    JSON.parse(
+        localStorage.getItem('parties')
+    ) || [];
+
+/* =========================================
+ELEMENTS
+========================================= */
+
+const tableBody =
+    document.getElementById('entryTableBody');
+
+const toast =
+    document.getElementById('toast');
+
+const partyCodeInput =
+    document.getElementById('partyCode');
+
+const partyNameBox =
+    document.getElementById('partyNameBox');
+
+let selectedIndex = 0;
+
+/* =========================================
+PARTY AUTO FETCH
+========================================= */
+
+partyCodeInput.addEventListener(
+    'input',
+    function(){
+
+    const code =
+        this.value.trim().toUpperCase();
+
+    const party =
+        parties.find(
+            item =>
+            item.code.toUpperCase()
+            === code
+        );
+
+    if(party){
+
+        partyNameBox.innerHTML =
+            'PARTY NAME : ' +
+            party.name;
+
+    }else{
+
+        partyNameBox.innerHTML =
+            'PARTY NAME : NOT FOUND';
+
+    }
+
+});
+
+/* =========================================
+TOAST
+========================================= */
+
+function showToast(text){
+
+    toast.innerHTML = text;
+
+    toast.classList.add('show');
+
+    setTimeout(()=>{
+
+        toast.classList.remove('show');
+
+    },2000);
+
+}
+
+/* =========================================
+TABLE
+========================================= */
+
+function renderTable(){
+
+    tableBody.innerHTML = '';
+
+    const currentEntries =
+        entries.filter(
+            item =>
+            item.matchId === activeMatch.id
+        );
+
+    let totalProfit = 0;
+    let totalLoss = 0;
+
+    currentEntries.forEach((entry,index)=>{
+
+        const row =
+            document.createElement('tr');
+
+        if(index === selectedIndex){
+
+            row.classList.add('active');
+
+        }
+
+        const pl =
+            entry.betType === 'LAGAI'
+            ?
+            ((entry.realAmount * entry.bhav)
+            - entry.realAmount)
+            :
+            entry.realAmount;
+
+        totalProfit += pl;
+
+        totalLoss += entry.realAmount;
+
+        row.innerHTML = `
+
+            <td>${index + 1}</td>
+
+            <td>${entry.team}</td>
+
+            <td>${entry.betType}</td>
+
+            <td>${entry.bhav}</td>
+
+            <td>${entry.points}</td>
+
+            <td>${entry.realAmount}</td>
+
+            <td>${entry.partyName}</td>
+
+            <td>${pl.toFixed(2)}</td>
+
+        `;
+
+        tableBody.appendChild(row);
+
+    });
+
+    document.getElementById('totalEntries')
+    .innerHTML =
+        'TOTAL ENTRIES : ' +
+        currentEntries.length;
+
+    document.getElementById('profitBox')
+    .innerHTML =
+        'PROFIT : ' +
+        totalProfit.toFixed(2);
+
+    document.getElementById('lossBox')
+    .innerHTML =
+        'LOSS : ' +
+        totalLoss.toFixed(2);
+
+}
+
+/* =========================================
+CLEAR FORM
+========================================= */
+
+function clearForm(){
+
+    document.getElementById('amount').value =
+        '';
+
+    document.getElementById('partyCode').value =
+        '';
+
+    partyNameBox.innerHTML =
+        'PARTY NAME : -';
+
+    document.getElementById('amount').focus();
+
+}
+
+/* =========================================
+SAVE ENTRY
+========================================= */
+
+function saveEntry(){
+
+    const betType =
+        document.getElementById('betType')
+        .value;
+
+    const bhav =
+        parseFloat(
+            document.getElementById('bhav')
+            .value
+        );
+
+    const points =
+        parseFloat(
+            document.getElementById('amount')
+            .value
+        );
+
+    const partyCode =
+        document.getElementById('partyCode')
+        .value.trim();
+
+    if(
+        !bhav
+        ||
+        !points
+        ||
+        !partyCode
+    ){
+
+        showToast(
+            'FILL ALL FIELDS!'
+        );
+
+        return;
+
+    }
+
+    const party =
+        parties.find(
+            item =>
+            item.code.toUpperCase()
+            === partyCode.toUpperCase()
+        );
+
+    if(!party){
+
+        showToast(
+            'INVALID PARTY CODE!'
+        );
+
+        return;
+
+    }
+
+    const realAmount =
+        points * 1000;
+
+    const entry = {
+
+        id:Date.now(),
+
+        matchId:activeMatch.id,
+
+        team:activeTeam,
+
+        betType,
+
+        bhav,
+
+        points,
+
+        realAmount,
+
+        partyCode,
+
+        partyName:party.name
+
+    };
+
+    entries.push(entry);
+
+    localStorage.setItem(
+        'bet_entries',
+        JSON.stringify(entries)
+    );
+
+    renderTable();
+
+    showToast(
+        'ENTRY SAVED!'
+    );
+
+    clearForm();
+
+}
+
+/* =========================================
+SAVE BUTTON
+========================================= */
+
+document.getElementById('saveEntryBtn')
+.addEventListener(
+    'click',
+    saveEntry
+);
+
+/* =========================================
+KEYBOARD
+========================================= */
+
+document.addEventListener(
+    'keydown',
+    (e)=>{
+
+    const currentEntries =
+        entries.filter(
+            item =>
+            item.matchId === activeMatch.id
+        );
+
+    /* LEFT */
+
+    if(e.key === 'ArrowLeft'){
+
+        teamABox.click();
+
+    }
+
+    /* RIGHT */
+
+    if(e.key === 'ArrowRight'){
+
+        teamBBox.click();
+
+    }
+
+    /* ENTER */
+
+    if(e.key === 'Enter'){
+
+        if(
+            document.activeElement.tagName
+            === 'INPUT'
+            ||
+            document.activeElement.tagName
+            === 'SELECT'
+        ){
+
+            saveEntry();
+
+        }
+
+    }
+
+    /* DELETE */
+
+    if(e.key === 'Delete'){
+
+        if(currentEntries[selectedIndex]){
+
+            const removeId =
+                currentEntries[selectedIndex]
+                .id;
+
+            entries =
+                entries.filter(
+                    item =>
+                    item.id !== removeId
+                );
+
+            localStorage.setItem(
+                'bet_entries',
+                JSON.stringify(entries)
+            );
+
+            if(selectedIndex > 0){
+
+                selectedIndex--;
+
+            }
+
+            renderTable();
+
+            showToast(
+                'ENTRY REMOVED!'
+            );
+
+        }
+
+    }
+
+    /* DOWN */
+
+    if(e.key === 'ArrowDown'){
+
+        if(
+            selectedIndex <
+            currentEntries.length - 1
+        ){
+
+            selectedIndex++;
+
+            renderTable();
+
+        }
+
+    }
+
+    /* UP */
+
+    if(e.key === 'ArrowUp'){
+
+        if(selectedIndex > 0){
+
+            selectedIndex--;
+
+            renderTable();
+
+        }
+
+    }
+
+    /* F2 */
+
+    if(e.key === 'F2'){
+
+        e.preventDefault();
+
+        clearForm();
+
+    }
+
+    /* ESC */
+
+    if(e.key === 'Escape'){
+
+        window.location.href =
+            'soda.html';
+
+    }
+
+});
+
+/* =========================================
+DEFAULT
+========================================= */
+
+document.getElementById('bhav').value =
+    teamARate;
+
+renderTable();
+
+/* =========================================
+DISABLE RIGHT CLICK
+========================================= */
+
+document.addEventListener(
+    'contextmenu',
+    (e)=>{
+
+        e.preventDefault();
+
+    }
+);
+
+/* =========================================
+DISABLE SELECT
+========================================= */
+
+document.addEventListener(
+    'selectstart',
+    (e)=>{
+
+        e.preventDefault();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

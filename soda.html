@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+
+<title>SODA - Match Management</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================================
+RESET
+========================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    min-height:100%;
+    overflow-x:hidden;
+    background:#0033cc;
+    font-family:'Share Tech Mono', monospace;
+    color:#fff;
+}
+
+/* safer mobile viewport */
+body{
+    min-height:100vh;
+    min-height:100dvh;
+}
+
+/* =========================================
+APP
+========================================= */
+
+.app{
+    width:100%;
+    min-height:100vh;
+    min-height:100dvh;
+    padding:10px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+/* =========================================
+TOP HEADER
+========================================= */
+
+.top-title{
+    text-align:center;
+    font-size:14px;
+    letter-spacing:4px;
+}
+
+.main-title{
+    text-align:center;
+    font-size:18px;
+    letter-spacing:2px;
+    line-height:1.4;
+}
+
+/* =========================================
+DATE TIME
+========================================= */
+
+.top-info{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    flex-wrap:wrap;
+    gap:6px;
+}
+
+/* =========================================
+WINDOW
+========================================= */
+
+.window{
+    width:100%;
+    flex:1;
+    border:2px solid #fff;
+    background:#1037df;
+    padding:10px;
+    box-shadow:6px 6px 0 #000;
+    position:relative;
+
+    /* 🔥 fix overflow */
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+}
+
+/* =========================================
+WINDOW TITLE
+========================================= */
+
+.window-title{
+    position:absolute;
+    top:-10px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#0033cc;
+    padding:0 10px;
+    font-size:14px;
+    color:#ff66cc;
+}
+
+/* =========================================
+TOP BAR
+========================================= */
+
+.top-bar{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-bottom:10px;
+}
+
+.add-btn{
+    width:100%;
+    background:#1565ff;
+    border:none;
+    color:#fff;
+    padding:10px;
+    font-size:14px;
+    cursor:pointer;
+    border-radius:4px;
+}
+
+.add-btn:active{
+    transform:scale(0.98);
+}
+
+.market-info{
+    font-size:12px;
+    color:#99ffcc;
+    text-align:center;
+}
+
+/* =========================================
+TABLE WRAPPER (🔥 IMPORTANT FIX)
+========================================= */
+
+.table-wrapper{
+    border:1px solid #fff;
+
+    /* instead of fixed calc height */
+    flex:1;
+    min-height:200px;
+
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+/* =========================================
+TABLE (MOBILE SCROLL SAFE)
+========================================= */
+
+table{
+    width:100%;
+    min-width:650px; /* horizontal scroll on mobile */
+    border-collapse:collapse;
+}
+
+thead{
+    background:#89a8ff;
+    position:sticky;
+    top:0;
+    z-index:1;
+}
+
+thead th{
+    padding:8px;
+    font-size:12px;
+    text-align:left;
+    border-right:1px solid #fff;
+    white-space:nowrap;
+}
+
+tbody td{
+    padding:8px;
+    font-size:12px;
+    border-bottom:1px solid rgba(255,255,255,0.2);
+    white-space:nowrap;
+}
+
+tbody tr.active{
+    background:#9eb6ff;
+    color:#0033cc;
+}
+
+/* =========================================
+HELP
+========================================= */
+
+.help{
+    text-align:center;
+    font-size:10px;
+    color:#ff66cc;
+    margin-top:5px;
+}
+
+/* =========================================
+POPUP (MOBILE IMPROVED)
+========================================= */
+
+.popup{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:92%;
+    max-width:380px;
+    background:#0033cc;
+    border:2px solid #fff;
+    padding:15px;
+    display:none;
+    z-index:999;
+}
+
+.popup.active{
+    display:block;
+}
+
+.popup-title{
+    text-align:center;
+    font-size:14px;
+    margin-bottom:10px;
+    color:#ff66cc;
+}
+
+.form-group{
+    margin-bottom:10px;
+}
+
+.form-group label{
+    font-size:12px;
+    display:block;
+    margin-bottom:4px;
+}
+
+.form-group input{
+    width:100%;
+    height:42px;
+    border:none;
+    padding:6px;
+    font-size:12px;
+    background:#89c4ff;
+    color:#0033cc;
+    border-radius:3px;
+}
+
+.save-btn{
+    width:100%;
+    height:42px;
+    background:#1565ff;
+    border:none;
+    color:#fff;
+    font-size:14px;
+    cursor:pointer;
+    border-radius:4px;
+}
+
+.save-btn:active{
+    transform:scale(0.98);
+}
+
+/* =========================================
+STATUS
+========================================= */
+
+.status-live{
+    color:#00ff66;
+    font-weight:bold;
+    font-size:12px;
+}
+
+.status-upcoming{
+    color:#ffff66;
+    font-weight:bold;
+    font-size:12px;
+}
+
+/* =========================================
+TABLET
+========================================= */
+
+@media(min-width:768px){
+
+    .top-title{
+        font-size:18px;
+    }
+
+    .main-title{
+        font-size:26px;
+    }
+
+    .top-info{
+        font-size:16px;
+    }
+
+    .add-btn{
+        width:auto;
+        align-self:flex-start;
+        padding:12px 18px;
+        font-size:16px;
+    }
+
+    .top-bar{
+        flex-direction:row;
+        justify-content:space-between;
+        align-items:center;
+    }
+
+    table{
+        min-width:100%;
+    }
+
+    thead th,
+    tbody td{
+        font-size:16px;
+    }
+
+    .help{
+        font-size:14px;
+    }
+}
+
+/* =========================================
+DESKTOP
+========================================= */
+
+@media(min-width:1200px){
+
+    .main-title{
+        font-size:42px;
+    }
+
+    .window{
+        max-width:1100px;
+        margin:auto;
+    }
+
+    .popup{
+        width:550px;
+    }
+
+    thead th,
+    tbody td{
+        font-size:18px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="app">
+
+    <!-- TOP -->
+
+    <div class="top-title">
+        SRI ACCOUNTING
+    </div>
+
+    <div class="main-title">
+        :- SODA MANAGEMENT SYSTEM :-
+    </div>
+
+    <div class="top-info">
+
+        <div id="dateBox">
+            DATE :-
+        </div>
+
+        <div id="timeBox">
+            TIME :-
+        </div>
+
+    </div>
+
+    <!-- WINDOW -->
+
+    <div class="window">
+
+        <div class="window-title" id="windowTitle">
+            :- ONE DAY :-
+        </div>
+
+        <div class="top-bar">
+
+            <button class="add-btn" id="addMatchBtn">
+                + ADD MATCH
+            </button>
+
+            <div class="market-info" id="marketInfo">
+                MARKET : ONE DAY
+            </div>
+
+        </div>
+
+        <!-- TABLE -->
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th width="70">SR</th>
+
+                        <th width="180">EVENT ID</th>
+
+                        <th>MATCH</th>
+
+                        <th width="170">START TIME</th>
+
+                        <th width="140">STATUS</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="matchTableBody">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- HELP -->
+
+    <div class="help">
+        F2 = ADD MATCH | ENTER = OPEN MATCH | DELETE = REMOVE | ESC = DASHBOARD
+    </div>
+
+</div>
+
+<!-- =========================================
+POPUP
+========================================= -->
+
+<div class="popup" id="popup">
+
+    <div class="popup-title">
+        ADD NEW MATCH
+    </div>
+
+    <div class="form-group">
+
+        <label>TEAM A</label>
+
+        <input type="text" id="teamA">
+
+    </div>
+
+    <div class="form-group">
+
+        <label>TEAM B</label>
+
+        <input type="text" id="teamB">
+
+    </div>
+
+    <div class="form-group">
+
+        <label>START TIME</label>
+
+        <input type="datetime-local" id="startTime">
+
+    </div>
+
+    <button class="save-btn" id="saveBtn">
+        SAVE MATCH
+    </button>
+
+</div>
+
+<script>
+
+/* =========================================
+SECURITY CHECK
+========================================= */
+
+if(
+    localStorage.getItem('admin_login') !== 'true'
+    ||
+    localStorage.getItem('dashboard_access') !== 'granted'
+){
+
+    window.location.href = 'index.html';
+
+}
+
+/* =========================================
+LOAD TYPE
+========================================= */
+
+const sodaType =
+    localStorage.getItem('soda_type') || 'ONE DAY';
+
+document.getElementById('windowTitle').innerHTML =
+    ':- ' + sodaType + ' :-';
+
+document.getElementById('marketInfo').innerHTML =
+    'MARKET : ' + sodaType;
+
+/* =========================================
+DATE TIME
+========================================= */
+
+function updateDateTime(){
+
+    const now = new Date();
+
+    document.getElementById('dateBox').innerHTML =
+        'DATE :- ' +
+        now.toLocaleDateString();
+
+    document.getElementById('timeBox').innerHTML =
+        'TIME :- ' +
+        now.toLocaleTimeString();
+
+}
+
+setInterval(updateDateTime,1000);
+
+updateDateTime();
+
+/* =========================================
+LOCAL STORAGE
+========================================= */
+
+let matches =
+    JSON.parse(localStorage.getItem('matches')) || [];
+
+/* =========================================
+FILTER BY TYPE
+========================================= */
+
+function getFilteredMatches(){
+
+    return matches.filter(match =>
+        match.type === sodaType
+    );
+
+}
+
+/* =========================================
+ELEMENTS
+========================================= */
+
+const popup =
+    document.getElementById('popup');
+
+const tableBody =
+    document.getElementById('matchTableBody');
+
+const addBtn =
+    document.getElementById('addMatchBtn');
+
+const saveBtn =
+    document.getElementById('saveBtn');
+
+let selectedIndex = 0;
+
+/* =========================================
+RENDER TABLE
+========================================= */
+
+function renderTable(){
+
+    const filteredMatches =
+        getFilteredMatches();
+
+    tableBody.innerHTML = '';
+
+    if(filteredMatches.length === 0){
+
+        tableBody.innerHTML = `
+
+            <tr>
+
+                <td colspan="5"
+                    style="
+                        text-align:center;
+                        padding:50px;
+                        font-size:24px;
+                    ">
+
+                    NO MATCHES AVAILABLE
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+    filteredMatches.forEach((match,index)=>{
+
+        const row =
+            document.createElement('tr');
+
+        if(index === selectedIndex){
+
+            row.classList.add('active');
+
+        }
+
+        const liveStatus =
+            match.status === 'LIVE'
+            ?
+            '<span class="status-live">LIVE</span>'
+            :
+            '<span class="status-upcoming">UPCOMING</span>';
+
+        row.innerHTML = `
+
+            <td>${index + 1}</td>
+
+            <td>${match.id}</td>
+
+            <td>
+                ${match.teamA}
+                VS
+                ${match.teamB}
+            </td>
+
+            <td>${match.startTime}</td>
+
+            <td>${liveStatus}</td>
+
+        `;
+
+        tableBody.appendChild(row);
+
+    });
+
+}
+
+/* =========================================
+OPEN POPUP
+========================================= */
+
+function openPopup(){
+
+    popup.classList.add('active');
+
+    document.getElementById('teamA').focus();
+
+}
+
+/* =========================================
+CLOSE POPUP
+========================================= */
+
+function closePopup(){
+
+    popup.classList.remove('active');
+
+}
+
+/* =========================================
+SAVE MATCH
+========================================= */
+
+saveBtn.addEventListener('click',()=>{
+
+    const teamA =
+        document.getElementById('teamA')
+        .value.trim();
+
+    const teamB =
+        document.getElementById('teamB')
+        .value.trim();
+
+    const startTime =
+        document.getElementById('startTime')
+        .value;
+
+    if(!teamA || !teamB || !startTime){
+
+        alert('Fill All Fields');
+
+        return;
+
+    }
+
+    const match = {
+
+        id: Date.now(),
+
+        teamA,
+
+        teamB,
+
+        type: sodaType,
+
+        startTime,
+
+        status:'UPCOMING'
+
+    };
+
+    matches.push(match);
+
+    localStorage.setItem(
+        'matches',
+        JSON.stringify(matches)
+    );
+
+    renderTable();
+
+    closePopup();
+
+    document.getElementById('teamA').value = '';
+
+    document.getElementById('teamB').value = '';
+
+    document.getElementById('startTime').value = '';
+
+});
+
+/* =========================================
+KEYBOARD SYSTEM
+========================================= */
+
+document.addEventListener('keydown',(e)=>{
+
+    const filteredMatches =
+        getFilteredMatches();
+
+    /* F2 */
+
+    if(e.key === 'F2'){
+
+        e.preventDefault();
+
+        openPopup();
+
+    }
+
+    /* ESC */
+
+    if(e.key === 'Escape'){
+
+        if(popup.classList.contains('active')){
+
+            closePopup();
+
+        }
+        else{
+
+            window.location.href =
+                'dashboard.html';
+
+        }
+
+    }
+
+    /* DOWN */
+
+    if(e.key === 'ArrowDown'){
+
+        if(selectedIndex <
+            filteredMatches.length - 1){
+
+            selectedIndex++;
+
+            renderTable();
+
+        }
+
+    }
+
+    /* UP */
+
+    if(e.key === 'ArrowUp'){
+
+        if(selectedIndex > 0){
+
+            selectedIndex--;
+
+            renderTable();
+
+        }
+
+    }
+
+    /* DELETE */
+
+    if(e.key === 'Delete'){
+
+        if(filteredMatches.length){
+
+            const selectedMatch =
+                filteredMatches[selectedIndex];
+
+            if(confirm('Delete Match?')){
+
+                matches =
+                    matches.filter(
+                        item =>
+                        item.id !== selectedMatch.id
+                    );
+
+                localStorage.setItem(
+                    'matches',
+                    JSON.stringify(matches)
+                );
+
+                if(selectedIndex > 0){
+
+                    selectedIndex--;
+
+                }
+
+                renderTable();
+
+            }
+
+        }
+
+    }
+
+    /* ENTER */
+
+    if(e.key === 'Enter'){
+
+        if(filteredMatches[selectedIndex]){
+
+            localStorage.setItem(
+                'active_match',
+                JSON.stringify(
+                    filteredMatches[selectedIndex]
+                )
+            );
+
+            window.location.href =
+                'soda-entry.html';
+
+        }
+
+    }
+
+});
+
+/* =========================================
+BUTTON
+========================================= */
+
+addBtn.addEventListener(
+    'click',
+    openPopup
+);
+
+/* =========================================
+DEFAULT DEMO DATA
+========================================= */
+
+if(matches.length === 0){
+
+    localStorage.setItem(
+        'matches',
+        JSON.stringify(matches)
+    );
+
+}
+
+renderTable();
+
+/* =========================================
+DISABLE RIGHT CLICK
+========================================= */
+
+document.addEventListener(
+    'contextmenu',
+    (e)=>{
+
+        e.preventDefault();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

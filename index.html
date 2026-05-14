@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<title>Security Screen</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#0033cc;
+    font-family:Arial, sans-serif;
+}
+
+/* =========================================
+MAIN SCREEN
+========================================= */
+
+.screen{
+    width:100vw;
+    height:100vh;
+    background:#0033cc;
+    border:2px solid #ffffff;
+    position:relative;
+}
+
+/* =========================================
+FAKE WHATSAPP BUTTON
+========================================= */
+
+.whatsapp{
+    position:absolute;
+    left:30px;
+    bottom:22px;
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    color:#32d96b;
+
+    font-size:clamp(24px, 2vw, 38px);
+    font-weight:bold;
+
+    user-select:none;
+}
+
+.whatsapp a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    color:inherit;
+    text-decoration:none;
+
+    transition:0.2s;
+}
+
+.whatsapp a:hover{
+    transform:scale(1.03);
+}
+
+.whatsapp i{
+    font-size:clamp(38px, 3vw, 56px);
+}
+
+/* =========================================
+HIDDEN LOGIN BUTTON
+========================================= */
+
+.hidden-login{
+    position:fixed;
+
+    right:0;
+    bottom:0;
+
+    width:25px;
+    height:25px;
+
+    background:transparent;
+
+    border:none;
+    outline:none;
+
+    opacity:0;
+
+    cursor:pointer;
+
+    z-index:99999;
+}
+
+/* =========================================
+OPTIONAL SECURITY DOT
+========================================= */
+
+.security-dot{
+    position:fixed;
+
+    right:8px;
+    bottom:8px;
+
+    width:4px;
+    height:4px;
+
+    background:#000;
+
+    border-radius:50%;
+
+    opacity:0.5;
+
+    z-index:10;
+}
+
+/* =========================================
+FAKE TERMINAL TEXT
+========================================= */
+
+.fake-status{
+    position:absolute;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%, -50%);
+
+    color:#ffffff;
+
+    text-align:center;
+
+    font-size:clamp(18px, 2vw, 34px);
+
+    letter-spacing:4px;
+
+    line-height:2.2;
+
+    opacity:0.12;
+
+    user-select:none;
+}
+
+/* =========================================
+RESPONSIVE
+========================================= */
+
+@media(max-width:768px){
+
+    .whatsapp{
+        left:18px;
+        bottom:18px;
+    }
+
+}
+
+@media(max-width:480px){
+
+    .whatsapp{
+        left:14px;
+        bottom:14px;
+        gap:8px;
+    }
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="screen">
+
+    <!-- FAKE WHATSAPP BUTTON -->
+
+    <div class="whatsapp">
+
+        <a href="https://wa.me/447452210670?text=Hello%20I'm%20newbee!" target="_blank">
+
+            <i class="fab fa-whatsapp"></i>
+
+            <span>WhatsApp</span>
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- SECRET LOGIN BUTTON -->
+
+<button class="hidden-login" id="hiddenLogin"></button>
+
+<!-- SMALL DOT -->
+
+<div class="security-dot"></div>
+
+<script>
+
+/* =========================================
+HIDDEN LOGIN REDIRECT
+========================================= */
+
+const hiddenLogin = document.getElementById('hiddenLogin');
+
+hiddenLogin.addEventListener('click', () => {
+
+    localStorage.setItem('security_access', 'granted');
+
+    window.location.href = 'login.html';
+
+});
+
+
+/* =========================================
+SECRET KEYBOARD ACCESS
+TYPE : login
+========================================= */
+
+let secret = '';
+
+document.addEventListener('keydown', (e) => {
+
+    secret += e.key.toLowerCase();
+
+    if(secret.includes('login')){
+
+        localStorage.setItem('security_access', 'granted');
+
+        window.location.href = 'login.html';
+
+    }
+
+    if(secret.length > 20){
+
+        secret = '';
+
+    }
+
+});
+
+
+/* =========================================
+DISABLE RIGHT CLICK
+========================================= */
+
+document.addEventListener('contextmenu', (e) => {
+
+    e.preventDefault();
+
+});
+
+
+/* =========================================
+DISABLE TEXT SELECTION
+========================================= */
+
+document.addEventListener('selectstart', (e) => {
+
+    e.preventDefault();
+
+});
+
+</script>
+
+</body>
+</html>
