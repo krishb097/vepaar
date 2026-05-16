@@ -578,6 +578,22 @@ const saveBtn =
 let selectedIndex = 0;
 
 /* =========================================
+OPEN MATCH
+========================================= */
+
+function openMatch(match){
+
+    localStorage.setItem(
+        'active_match',
+        JSON.stringify(match)
+    );
+
+    window.location.href =
+        'soda-entry.html';
+
+}
+
+/* =========================================
 RENDER TABLE
 ========================================= */
 
@@ -648,6 +664,59 @@ function renderTable(){
             <td>${liveStatus}</td>
 
         `;
+
+        /* CLICKABLE */
+
+        row.style.cursor = 'pointer';
+
+        /* SINGLE CLICK */
+
+        row.addEventListener('click',()=>{
+
+            selectedIndex = index;
+
+            renderTable();
+
+        });
+
+        /* DOUBLE CLICK */
+
+        row.addEventListener('dblclick',()=>{
+
+            openMatch(match);
+
+        });
+
+        /* MOBILE DOUBLE TAP */
+
+        let tapTimer;
+
+        row.addEventListener('touchend',()=>{
+
+            if(tapTimer){
+
+                clearTimeout(tapTimer);
+
+                tapTimer = null;
+
+                openMatch(match);
+
+            }
+            else{
+
+                tapTimer = setTimeout(()=>{
+
+                    selectedIndex = index;
+
+                    renderTable();
+
+                    tapTimer = null;
+
+                },300);
+
+            }
+
+        });
 
         tableBody.appendChild(row);
 
@@ -846,15 +915,9 @@ document.addEventListener('keydown',(e)=>{
 
         if(filteredMatches[selectedIndex]){
 
-            localStorage.setItem(
-                'active_match',
-                JSON.stringify(
-                    filteredMatches[selectedIndex]
-                )
+            openMatch(
+                filteredMatches[selectedIndex]
             );
-
-            window.location.href =
-                'soda-entry.html';
 
         }
 
